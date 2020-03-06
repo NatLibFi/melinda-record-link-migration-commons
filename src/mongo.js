@@ -41,7 +41,7 @@ export default async function (MONGO_URI) {
 		// Create JobItem
 		const newJobItem = {
 			jobId,
-			jobState: JOB_STATES.IN_QUEUE,
+			jobState: JOB_STATES.PENDING_RECORDS,
 			jobConfig,
 			creationTime: moment().toDate(),
 			modificationTime: moment().toDate()
