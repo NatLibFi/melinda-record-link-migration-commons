@@ -2,6 +2,7 @@ import {MongoClient, Logger} from 'mongodb';
 import {Error as ApiError, Utils} from '@natlibfi/melinda-commons';
 import {logError} from './utils.js';
 import moment from 'moment';
+import {JOB_STATES} from './constants';
 
 /* JobItem:
 {
@@ -21,7 +22,7 @@ import moment from 'moment';
 }
 */
 
-export default async function (MONGO_URI, JOB_STATES) {
+export default async function (MONGO_URI) {
 	const {createLogger} = Utils;
 	const logger = createLogger();
 	const mongoLogger = Logger;
