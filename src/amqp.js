@@ -182,7 +182,7 @@ export default async function (AMQP_URL) {
 
 			channel.sendToQueue(
 				queue,
-				Buffer.from(JSON.stringify({data})),
+				Buffer.from(JSON.stringify(data)),
 				{
 					correlationId,
 					persistent: true,
