@@ -11,7 +11,17 @@ import {JOB_STATES} from './constants';
     "jobConfig": {
         "oai_pmh_root": "bib",
         "oai_pmh_format": "melinda_marc",
-        "tags": ["100", "110", "350"],
+        "links": [
+            {
+                from: {tag: "100", sub:"a", skip: "0"},
+                to: {tag: "400", sub: "a"},
+                sru: {
+                    serverUrl: "https://sru.api.melinda-test.kansalliskirjasto.fi/autprv-names",
+                    version: "2.0",
+                    maximumRecords: 10,
+                    query: ""}
+            }
+        ],
 		"ids": ["000015418", "002015419", "010015420", "000215421", "010015422", "008015423", "000915424", "000015425", "003015426", "010215427"],
         "fromTo": {"start": 15408, "end": 15448}
 		"startFrom": 000015500,

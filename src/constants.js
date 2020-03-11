@@ -12,7 +12,17 @@ export const JOB_STATES = {
 export const DEFAULT_JOB_CONFIG = {
 	oaiPmhRoot: 'bib',
 	oaiPmhFormat: 'melinda_marc',
-	tags: ['100', '110', '350'],
+	links: [
+		{
+			from: {tag: "100", sub:"a", skip: "0"},
+			to: {tag: "400", sub: "a"},
+			sru: {
+				serverUrl: "https://sru.api.melinda-test.kansalliskirjasto.fi/autprv-names",
+				version: "2.0",
+				maximumRecords: 10,
+				query: ""}
+		}
+	],
 	ids: false,
 	fromTo: false,
 	startFrom: false
