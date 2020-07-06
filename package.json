@@ -32,6 +32,8 @@
 	"dependencies": {
 		"@natlibfi/marc-record": "^4.0.1",
 		"@natlibfi/marc-record-serializers": "^5.0.1",
+        "@natlibfi/marc-record-validate": "5.0.1",
+        "@natlibfi/marc-record-validators-melinda": "8.2.3",
 		"@natlibfi/melinda-commons": "^7.2.1",
 		"amqplib": ">=0.5.5 <1.0.0",
 		"moment": "^2.24.0",
