@@ -1,6 +1,6 @@
 import mongoFactory from './mongo';
 import amqpFactory from './amqp';
-import {logError} from './utils';
+import {createValidationFactory} from './validation';
 
-export {mongoFactory, amqpFactory, logError};
+export {mongoFactory, amqpFactory, createValidationFactory};
 export * from './constants';
