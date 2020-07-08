@@ -54,14 +54,6 @@ export default async function (AMQP_URL) {
         return channelInfo.messageCount;
       }
 
-      if (style === 'one') {
-        return consumeOne(queue);
-      }
-
-      if (style === 'raw') {
-        return consumeRaw(queue);
-      }
-
       if (style === 'basic') {
         return consume(queue);
       }

@@ -7,7 +7,8 @@ import moment from 'moment';
   "jobId": "FOO"
   "jobState":"PENDING_SRU_HARVESTER",
   "jobConfig": {
-    hostRecord: MarcRecord
+    hostRecord: MarcRecord,
+    apiHarvesterProfileId: 'viola-aut-migration',
     search: {
       from: {tag: '100', value: {code: 'a'}},
       query: `dc.author=${0}`,
