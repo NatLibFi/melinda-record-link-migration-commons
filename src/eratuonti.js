@@ -3,13 +3,13 @@
 import {Utils} from '@natlibfi/melinda-commons';
 import {BLOB_STATE, createApiClient} from '@natlibfi/melinda-record-import-commons';
 
-export default function ({API_URL, API_USERNAME, API_PASSWORD, API_CLIENT_USER_AGENT, API_HARVERSTER_PROFILE_ID}) {
+export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, apiHarvesterProfileId}) {
   const {createLogger} = Utils;
   const logger = createLogger();
   logger.log('verbose', 'Connecting to erätuonti');
   const client = createApiClient({
-    url: API_URL, username: API_USERNAME, password: API_PASSWORD,
-    userAgent: API_CLIENT_USER_AGENT
+    url: apiUrl, username: apiUsername, password: apiPassword,
+    userAgent: apiClientUserAgent
   });
 
   return {sendBlob};
@@ -22,7 +22,7 @@ export default function ({API_URL, API_USERNAME, API_PASSWORD, API_CLIENT_USER_A
     if (blob) {
       logger.log('info', 'Trying to create  blob');
       // Record-import-commons: async function createBlob({blob, type, profile})
-      const response = await client.createBlob({blob, type: 'application/json', profile: API_HARVERSTER_PROFILE_ID});
+      const response = await client.createBlob({blob, type: 'application/json', profile: apiHarvesterProfileId});
       logger.log('debug', 'Got response');
       // Return blobId to be saved in jobItem
       return response;
