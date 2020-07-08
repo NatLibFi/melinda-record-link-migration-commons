@@ -17,12 +17,15 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
   // Send record to transformer
   async function sendBlob(data) {
     const blob = JSON.stringify(data);
+    const type = 'application/json';
+    const profile = apiHarvesterProfileId;
+    logger.log('debug', profile);
     logger.log('silly', blob);
     logger.log('info', 'Data sending to Erätuonti service has begun!');
     if (blob) {
-      logger.log('info', 'Trying to create  blob');
-      // Record-import-commons: async function createBlob({blob, type, profile})
-      const response = await client.createBlob({blob, type: 'application/json', profile: apiHarvesterProfileId});
+      logger.log('info', 'Trying to create blob');
+      // Record-import-commons: async function createBlob({blob (data), type (constent-type), profile (import profile)})
+      const response = await client.createBlob({blob, type, profile});
       logger.log('debug', 'Got response');
       // Return blobId to be saved in jobItem
       return response;

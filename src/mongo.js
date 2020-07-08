@@ -29,14 +29,14 @@ import moment from 'moment';
 }
 */
 
-export default async function (MONGO_URI) {
+export default async function (mongoUrl) {
   const {createLogger, logError} = Utils;
   const logger = createLogger();
   // Connect to mongo (MONGO)
-  const client = await MongoClient.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true});
+  const client = await MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
   const db = client.db('linkker');
 
-  return {create, query, remove, getOne, setState, updateResumptionToken};
+  return {create, query, remove, getOne, setState, updateResumptionToken, pushBlobIds};
 
   function create({jobId, jobState, jobConfig}) {
     // Create JobItem
@@ -101,5 +101,19 @@ export default async function (MONGO_URI) {
       }
     }, {projection: {_id: 0}, returnNewDocument: true});
     return result.value;
+  }
+
+  async function pushBlobIds({jobId, blobIds}) {
+    logger.log('debug', `Push queue-item ids to list: ${jobId}, ${blobIds}`);
+    await db.collection('queue-items').updateOne({
+      jobId
+    }, {
+      $set: {
+        modificationTime: moment().toDate()
+      },
+      $push: {
+        'jobConfig.blobIds': {$each: blobIds}
+      }
+    });
   }
 }
