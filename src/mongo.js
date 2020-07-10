@@ -15,8 +15,7 @@ import moment from 'moment';
       resumptionToken: {"_": "FOO", "$":{"expirationDate":"2020-01-01T00:00:01.000+02:00","cursor":"0"}},
       url: 'https://sru.api.melinda-test.kansalliskirjasto.fi/bib'
     },
-    searchValidationFilter: {
-      fieldStructure: [{tag: /^042$/u, subfields: {a: /^finbd$/u}}],
+    linkDataSearchValidationFilter: {
       subfieldExclusion: [{tag: /^100$/u, subfields: [{code: /0/u}]}]
     },
     changes: [{
