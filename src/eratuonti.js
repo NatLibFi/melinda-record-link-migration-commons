@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars, */
 
 import {Utils} from '@natlibfi/melinda-commons';
-import {BLOB_STATE, createApiClient} from '@natlibfi/melinda-record-import-commons';
+import {createApiClient} from '@natlibfi/melinda-record-import-commons';
 
 export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, apiHarvesterProfileId}) {
   const {createLogger} = Utils;
@@ -20,16 +20,21 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
     const type = 'application/json';
     const profile = apiHarvesterProfileId;
     logger.log('debug', profile);
+    logger.log('debug', type);
     logger.log('silly', blob);
     logger.log('info', 'Data sending to Erätuonti service has begun!');
     if (blob) {
-      logger.log('info', 'Trying to create blob');
-      // Record-import-commons: async function createBlob({blob (data), type (constent-type), profile (import profile)})
-      const response = await client.createBlob({blob, type, profile});
-      logger.log('debug', 'Got response');
-      // Return blobId to be saved in jobItem
-      return response;
-      // TRANSFORMER picks it from QUEUE
+      try {
+        logger.log('info', 'Trying to create blob');
+        // Record-import-commons: async function createBlob({blob (data), type (constent-type), profile (import profile)})
+        const response = await client.createBlob({blob, type, profile});
+        logger.log('debug', 'Got response');
+        // Return blobId to be saved in jobItem
+        return response;
+        // TRANSFORMER picks it from QUEUE
+      } catch (error) {
+        logger.log('error', error);
+      }
     }
 
     return false;
