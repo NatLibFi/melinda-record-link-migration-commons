@@ -16,7 +16,9 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
 
   // Send record to transformer
   async function sendBlob({hostRecord, changes, valids}) {
-    const linkedData = valids.map(record => {hostRecord, changes, record});
+    const linkedData = valids.map(record => {
+      return {hostRecord, changes, record};
+    });
     const blob = JSON.stringify(linkedData);
     const type = 'application/json';
     const profile = apiHarvesterProfileId;
