@@ -21,7 +21,7 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
     const profile = apiHarvesterProfileId;
     logger.log('debug', profile);
     logger.log('debug', type);
-    logger.log('silly', blob);
+    logger.log('debug', blob);
     logger.log('info', 'Data sending to Erätuonti service has begun!');
     if (blob) {
       try {
