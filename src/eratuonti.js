@@ -23,7 +23,7 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
     logger.log('debug', type);
     logger.log('debug', blob);
     logger.log('info', 'Data sending to Erätuonti service has begun!');
-    if (blob) {
+    if (blob) { // eslint-disable-line functional/no-conditional-statement
       try {
         logger.log('info', 'Trying to create blob');
         // Record-import-commons: async function createBlob({blob (data), type (constent-type), profile (import profile)})
@@ -34,6 +34,7 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
         // TRANSFORMER picks it from QUEUE
       } catch (error) {
         logger.log('error', error);
+        return false;
       }
     }
 

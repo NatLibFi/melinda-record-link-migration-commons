@@ -38,6 +38,9 @@ export default async function (mongoUrl) {
   return {create, query, remove, getOne, setState, updateResumptionToken, pushBlobIds};
 
   function create({jobId, jobState, jobConfig}) {
+    if (jobState === undefined || jobConfig === undefined) { // eslint-disable-line functional/no-conditional-statement
+      throw new ApiError(400, 'Invalid job settings!');
+    }
     // Create JobItem
     const newJobItem = {
       jobId,
@@ -52,7 +55,7 @@ export default async function (mongoUrl) {
       return db.collection('job-items').findOne({jobId}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
-      throw new ApiError(500);
+      throw new ApiError(500, 'Error while creating job item');
     }
   }
 
