@@ -3,7 +3,7 @@
 import {Utils} from '@natlibfi/melinda-commons';
 import {createApiClient} from '@natlibfi/melinda-record-import-commons';
 
-export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, apiHarvesterProfileId}) {
+export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, linkDataHarvesterApiProfileId}) {
   const {createLogger} = Utils;
   const logger = createLogger();
   logger.log('verbose', 'Connecting to erätuonti');
@@ -18,7 +18,7 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
   async function sendBlob(linkedValids) {
     const blob = JSON.stringify(linkedValids);
     const type = 'application/json';
-    const profile = apiHarvesterProfileId;
+    const profile = linkDataHarvesterApiProfileId;
     logger.log('debug', profile);
     logger.log('debug', type);
     logger.log('debug', blob);
