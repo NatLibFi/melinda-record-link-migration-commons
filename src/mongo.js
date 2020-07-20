@@ -51,7 +51,7 @@ export default async function (mongoUrl) {
     };
     try {
       db.collection('job-items').insertOne(newJobItem);
-      logger.log('info', 'New job item has been made!');
+      logger.log('info', 'New jobItem has been made!');
       return db.collection('job-items').findOne({jobId}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
@@ -106,7 +106,7 @@ export default async function (mongoUrl) {
   }
 
   async function pushBlobIds({jobId, blobIds}) {
-    logger.log('debug', `Push queue-item ids to list: ${jobId}, ${blobIds}`);
+    logger.log('debug', `Push jobItem ${jobId} blobIds list: ${blobIds}`);
     await db.collection('queue-items').updateOne({
       jobId
     }, {
