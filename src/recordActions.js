@@ -96,7 +96,7 @@ export default function () {
     const filteredFields = record.getFields(to.where.to.tag, filterSubfields);
     logger.log('debug', `Filtered fields ${JSON.stringify(filteredFields)}`);
 
-    return true;
+    return filteredFields;
   }
 
   function addOrReplaceDataFields(record, linkDataFields, {duplicateFilterCodes = ['XXX']}) {
