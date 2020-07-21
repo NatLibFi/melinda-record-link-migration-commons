@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import {Utils} from '@natlibfi/melinda-commons';
+import {format} from 'util';
 
 export default function () {
   const {createLogger} = Utils;
