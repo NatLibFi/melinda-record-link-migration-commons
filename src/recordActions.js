@@ -80,6 +80,24 @@ export default function () {
     });
   }
 
+  // Modify
+
+  function replaceValueInField(sourceRecord, record, change) {
+    const {from, to, order} = change;
+    const changeValue = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
+    logger.log('debug', `Change value ${changeValue}`);
+    const formatedChangeValue = format(to.format, changeValue);
+    logger.log('debug', `Formated change value ${formatedChangeValue}`);
+
+    const filterSubfields = subfieldsFromRecord(hostRecord, to.where);
+    logger.log('debug', `Filter subfields ${JSON.stringify(filterSubfields)}`);
+
+    const filteredFields = record.getFields(to.where.to.tag, filterSubfields);
+    logger.log('debug', `Filtered fields ${JSON.stringify(filteredFields)}`);
+
+    return true;
+  }
+
   function addOrReplaceDataFields(record, linkDataFields, {duplicateFilterCodes = ['XXX']}) {
     logger.log('verbose', 'Replacing data fields to record');
 
