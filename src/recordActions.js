@@ -5,7 +5,7 @@ export default function () {
   const {createLogger} = Utils;
   const logger = createLogger(); // eslint-disable-line no-unused-vars
 
-  return {filterRecordsBy, filterExistingFields, valuesFromRecord, subfieldsFromRecord, addOrReplaceDataFields};
+  return {filterRecordsBy, filterExistingFields, valuesFromRecord, subfieldsFromRecord, replaceValueInField, addOrReplaceDataFields};
 
   // Filter & sort
 
