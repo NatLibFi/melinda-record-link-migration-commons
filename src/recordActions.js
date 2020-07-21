@@ -52,7 +52,7 @@ export default function () {
 
   // Get
 
-  function valuesFromRecord(from, record) {
+  function valuesFromRecord(record, {from}) {
     const fields = record.get(new RegExp(`^${from.tag}$`, 'u'));
     if (fields.length === 0) {
       return false;
@@ -61,7 +61,7 @@ export default function () {
     return fields.map(field => field.value);
   }
 
-  function subfieldsFromRecord(from, record, collect = []) {
+  function subfieldsFromRecord(record, {from, collect = []}) {
     const fields = record.get(new RegExp(`^${from.tag}$`, 'u'));
     if (fields.length === 0) {
       return false;
