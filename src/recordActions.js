@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
 import {Utils} from '@natlibfi/melinda-commons';
-import {format} from 'util';
 
 export default function () {
   const {createLogger} = Utils;
   const logger = createLogger(); // eslint-disable-line no-unused-vars
 
-  return {filterRecordsBy, valuesFromRecord, subfieldsFromRecord, addToRecord};
+  return {filterRecordsBy, filterExistingFields, valuesFromRecord, subfieldsFromRecord, addOrReplaceDataFields};
+
+  // Filter & sort
 
   function filterRecordsBy(sourceRecord, records, {collect, from, to}) {
     if (from === undefined || to === undefined) {
@@ -37,6 +38,20 @@ export default function () {
     return filteredRecords;
   }
 
+  function filterExistingFields(linkDataFields, record) {
+    return linkDataFields.filter(field => {
+      logger.log('silly', `Removing duplicate ${field.tag}, ${JSON.stringify(field.subfields)}`);
+
+      if (record.containsFieldWithValue(field.tag, field.subfields)) {
+        return false;
+      }
+
+      return true;
+    });
+  }
+
+  // Get
+
   function valuesFromRecord(from, record) {
     const fields = record.get(new RegExp(`^${from.tag}$`, 'u'));
     if (fields.length === 0) {
@@ -65,56 +80,22 @@ export default function () {
     });
   }
 
-  function addToRecord(value, to, record) {
-    logger.log('verbose', 'Adding value to record');
-    const [field] = record.get(new RegExp(`^${to.tag}$`, 'u'));
-    const formatedValue = format(to.format, value);
-    logger.log('debug', formatedValue);
+  function addOrReplaceDataFields(record, linkDataFields, {duplicateFilterCodes = ['XXX']}) {
+    logger.log('verbose', 'Replacing data fields to record');
 
-    if (field === undefined) {
-      if (to.value === 'value') {
-        record.insertField({
-          tag: to.tag,
-          value: formatedValue
-        });
-
-        return record;
+    linkDataFields.forEach(field => {
+      const filterSubfields = field.subfields.filter(sub => duplicateFilterCodes.includes(sub.code));
+      const dublicate = record.getFields(field.tag, filterSubfields);
+      if (dublicate.length > 0) {
+        logger.log('debug', `Replacing dublicate: ${JSON.stringify(dublicate)}`);
+        dublicate.forEach(field => record.removeField(field));
+        record.insertField(field);
+        return;
       }
-
-      record.insertField({
-        tag: to.tag,
-        subfields: [
-          {
-            code: to.value.code,
-            value: formatedValue
-          }
-        ]
-      });
-
-      return record;
-    }
-
-    if (to.value === 'value') {
-      field.value = formatedValue; // eslint-disable-line functional/immutable-data
-      return record;
-    }
-
-    // Remove old one
-    record.removeField(field);
-    // Append new one
-    record.insertField({
-      tag: field.tag,
-      ind1: field.ind1,
-      ind2: field.ind2,
-      subfields: field.subfields.map(sub => {
-        if (sub.code === to.value.code) {
-          return {code: to.value.code, value: formatedValue};
-        }
-        return sub;
-      })
+      logger.log('debug', `Inserting new field: ${JSON.stringify(field)}`);
+      record.insertField(field);
     });
 
-    // Return record
     return record;
   }
 }
