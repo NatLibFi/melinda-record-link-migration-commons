@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {Utils} from '@natlibfi/melinda-commons';
 import {format} from 'util';
+import {sortSubfields} from './utils';
 
 export default function () {
   const {createLogger} = Utils;
@@ -84,25 +85,47 @@ export default function () {
   // Modify
 
   function replaceValueInField(sourceRecord, record, change) {
-    const {from, to, order} = change;
-    const changeValue = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
-    logger.log('debug', `Change value ${changeValue}`);
-    logger.log('info', `Change value ${changeValue}`);
+		// TEST {from, to, order} = change;
+		const {from, to} = change;
+		const changeValue = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
+		logger.log('info', `Change value ${changeValue}`);
 
-    const formatedChangeValue = format(to.format, changeValue);
-    logger.log('debug', `Formated change value ${formatedChangeValue}`);
-    logger.log('info', `Formated change value ${formatedChangeValue}`);
+		const formatedChangeValue = toFormat(to, changeValue);
+		logger.log('info', `Formated change value ${formatedChangeValue}`);
 
-    /* Test
-    const filterSubfields = subfieldsFromRecord(sourceRecord, to.where);
-    logger.log('debug', `Filter subfields ${JSON.stringify(filterSubfields)}`);
+		const [filterSubfields] = subfieldsFromRecord(sourceRecord, to.where);
+		logger.log('info', `Filter subfields ${JSON.stringify(filterSubfields)}`);
 
-    const filteredFields = record.getFields(to.where.to.tag, filterSubfields);
-    logger.log('debug', `Filtered fields ${JSON.stringify(filteredFields)}`);
-    */
-    logger.log('info', 'TESTING *!*!*!*');
-    return 'Test';
-  }
+		const filteredFields = record.getFields(to.where.to.tag, filterSubfields);
+		logger.log('info', `Filtered fields ${JSON.stringify(filteredFields)}`);
+
+		filteredFields.forEach(field => {
+			if (JSON.stringify(field.subfields).indexOf(JSON.stringify(formatedChangeValue)) > -1){
+				return;
+			}
+
+			const orderedSubfields = sortSubfields(change.order, [...field.subfields, formatedChangeValue]);
+
+			record.insertField({
+				tag: field.tag,
+				ind1: field.ind1,
+				ind2: field.ind2,
+				subfields: orderedSubfields
+			});
+
+			record.removeField(field);
+		});
+
+		return record;
+
+		function toFormat(to, value) {
+			if (to.value === 'value') {
+				return {tag: to.tag, value: format(to.format, value)}
+			}
+
+			return {code: to.value.code, value: format(to.format, value)}
+		}
+	}
 
   function addOrReplaceDataFields(record, linkDataFields, {duplicateFilterCodes = ['XXX']}) {
     logger.log('verbose', 'Replacing data fields to record');

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {Utils} from '@natlibfi/melinda-commons';
 import {format} from 'util';
+import {sortSubfields} from './utils';
 
 export default function () {
   const {createLogger} = Utils;
@@ -63,20 +64,5 @@ export default function () {
         subfields: processedSubfields
       };
     });
-  }
-
-  function sortSubfields(order, subfields, orderedSubfields = []) {
-    const [code, ...rest] = order;
-    if (code === undefined) {
-      return [...orderedSubfields, ...subfields];
-    }
-
-    const filtered = subfields.filter(sub => sub.code === code);
-    const restSubfields = subfields.filter(sub => sub.code !== code);
-    if (filtered.length > 0) {
-      return sortSubfields(rest, restSubfields, [...orderedSubfields, ...filtered]);
-    }
-
-    return sortSubfields(rest, restSubfields, orderedSubfields);
   }
 }
