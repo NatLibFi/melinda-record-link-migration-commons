@@ -84,6 +84,8 @@ export default function () {
   // Modify
 
   function replaceValueInField(sourceRecord, record, change) {
+
+    /* Test
     const {from, to, order} = change;
     const changeValue = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
     logger.log('debug', `Change value ${changeValue}`);
@@ -95,8 +97,9 @@ export default function () {
 
     const filteredFields = record.getFields(to.where.to.tag, filterSubfields);
     logger.log('debug', `Filtered fields ${JSON.stringify(filteredFields)}`);
-
-    return filteredFields;
+    */
+    logger.log('info', 'TESTING *!*!*!*');
+    return 'Test';
   }
 
   function addOrReplaceDataFields(record, linkDataFields, {duplicateFilterCodes = ['XXX']}) {
