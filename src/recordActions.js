@@ -84,14 +84,16 @@ export default function () {
   // Modify
 
   function replaceValueInField(sourceRecord, record, change) {
-
-    /* Test
     const {from, to, order} = change;
     const changeValue = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
     logger.log('debug', `Change value ${changeValue}`);
+    logger.log('info', `Change value ${changeValue}`);
+
     const formatedChangeValue = format(to.format, changeValue);
     logger.log('debug', `Formated change value ${formatedChangeValue}`);
+    logger.log('info', `Formated change value ${formatedChangeValue}`);
 
+    /* Test
     const filterSubfields = subfieldsFromRecord(sourceRecord, to.where);
     logger.log('debug', `Filter subfields ${JSON.stringify(filterSubfields)}`);
 
