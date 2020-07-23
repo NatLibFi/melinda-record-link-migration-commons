@@ -114,7 +114,7 @@ export default async function (mongoUrl) {
         modificationTime: moment().toDate()
       },
       $push: {
-        jobConfig: {blobIds: {$each: blobIds}}
+        "jobConfig.blobIds": {$each: blobIds}
       }
     });
   }
