@@ -22,7 +22,7 @@ export default function () {
     to: {tag: '100'}
     */
 
-    const [fieldsFromHost] = subfieldsFromRecord(from, sourceRecord, collect);
+    const [fieldsFromHost] = subfieldsFromRecord(sourceRecord, {from, collect});
     if (fieldsFromHost.length < 1) {
       return false;
     }
@@ -85,47 +85,47 @@ export default function () {
   // Modify
 
   function replaceValueInField(sourceRecord, record, change) {
-		// TEST {from, to, order} = change;
-		const {from, to} = change;
-		const changeValue = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
-		logger.log('info', `Change value ${changeValue}`);
+    // TEST {from, to, order} = change;
+    const {from, to} = change;
+    const changeValue = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
+    logger.log('info', `Change value ${changeValue}`);
 
-		const formatedChangeValue = toFormat(to, changeValue);
-		logger.log('info', `Formated change value ${formatedChangeValue}`);
+    const formatedChangeValue = toFormat(to, changeValue);
+    logger.log('info', `Formated change value ${formatedChangeValue}`);
 
-		const [filterSubfields] = subfieldsFromRecord(sourceRecord, to.where);
-		logger.log('info', `Filter subfields ${JSON.stringify(filterSubfields)}`);
+    const [filterSubfields] = subfieldsFromRecord(sourceRecord, to.where);
+    logger.log('info', `Filter subfields ${JSON.stringify(filterSubfields)}`);
 
-		const filteredFields = record.getFields(to.where.to.tag, filterSubfields);
-		logger.log('info', `Filtered fields ${JSON.stringify(filteredFields)}`);
+    const filteredFields = record.getFields(to.where.to.tag, filterSubfields);
+    logger.log('info', `Filtered fields ${JSON.stringify(filteredFields)}`);
 
-		filteredFields.forEach(field => {
-			if (JSON.stringify(field.subfields).indexOf(JSON.stringify(formatedChangeValue)) > -1){
-				return;
-			}
+    filteredFields.forEach(field => {
+      if (JSON.stringify(field.subfields).indexOf(JSON.stringify(formatedChangeValue)) > -1) {
+        return;
+      }
 
-			const orderedSubfields = sortSubfields(change.order, [...field.subfields, formatedChangeValue]);
+      const orderedSubfields = sortSubfields(change.order, [...field.subfields, formatedChangeValue]);
 
-			record.insertField({
-				tag: field.tag,
-				ind1: field.ind1,
-				ind2: field.ind2,
-				subfields: orderedSubfields
-			});
+      record.insertField({
+        tag: field.tag,
+        ind1: field.ind1,
+        ind2: field.ind2,
+        subfields: orderedSubfields
+      });
 
-			record.removeField(field);
-		});
+      record.removeField(field);
+    });
 
-		return record;
+    return record;
 
-		function toFormat(to, value) {
-			if (to.value === 'value') {
-				return {tag: to.tag, value: format(to.format, value)}
-			}
+    function toFormat(to, value) {
+      if (to.value === 'value') {
+        return {tag: to.tag, value: format(to.format, value)};
+      }
 
-			return {code: to.value.code, value: format(to.format, value)}
-		}
-	}
+      return {code: to.value.code, value: format(to.format, value)};
+    }
+  }
 
   function addOrReplaceDataFields(record, linkDataFields, {duplicateFilterCodes = ['XXX']}) {
     logger.log('verbose', 'Replacing data fields to record');
