@@ -98,7 +98,7 @@ export default async function (mongoUrl) {
       jobId
     }, {
       $set: {
-        'jobConfig.resumptionToken': resumptionToken,
+        jobConfig: {resumptionToken: resumptionToken},
         modificationTime: moment().toDate()
       }
     }, {projection: {_id: 0}, returnNewDocument: true});
@@ -114,7 +114,7 @@ export default async function (mongoUrl) {
         modificationTime: moment().toDate()
       },
       $push: {
-        'jobConfig.blobIds': {$each: blobIds}
+        jobConfig: {blobIds: {$each: blobIds}}
       }
     });
   }
