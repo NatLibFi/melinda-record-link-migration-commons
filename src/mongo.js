@@ -93,13 +93,13 @@ export default async function (mongoUrl) {
     return result.value;
   }
 
-  async function updateResumptionToken({jobId, resumptionToken}) {
-    logger.log('info', `Setting jobItem resumptionToken: ${jobId}, ${resumptionToken}`);
+  async function updateJobConfig({jobId, jobConfig}) {
+    logger.log('info', `Setting jobItem resumptionToken: ${jobId}, ${jobConfig}`);
     const result = await db.collection('job-items').findOneAndUpdate({
       jobId
     }, {
       $set: {
-        jobConfig: {resumptionToken: resumptionToken},
+        jobConfig: jobConfig,
         modificationTime: moment().toDate()
       }
     }, {projection: {_id: 0}, returnNewDocument: true});

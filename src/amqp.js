@@ -37,7 +37,7 @@ export default async function (AMQP_URL) {
   const connection = await amqplib.connect(AMQP_URL);
   const channel = await connection.createChannel();
 
-  return {checkQueue, consume, consumeOne, consumeRaw, ackNReplyMessages, ackMessages, nackMessages, sendToQueue, removeQueue};
+  return {checkQueue, consume, consumeOne, messagesToRecords, ackNReplyMessages, ackMessages, nackMessages, sendToQueue, removeQueue};
 
   async function checkQueue(queue, style = 'basic', purge = false) {
     try {
@@ -58,6 +58,10 @@ export default async function (AMQP_URL) {
         return consume(queue);
       }
 
+      if (style === 'one') {
+        return consumeOne(queue);
+      }
+
       // Defaults:
       throw new ApiError(422);
     } catch (error) {
@@ -76,48 +80,13 @@ export default async function (AMQP_URL) {
     try {
       await channel.assertQueue(queue, {durable: true});
       const queMessages = await getData(queue);
-
-      const headers = getHeaderInfo(queMessages[0]);
-      logger.log('debug', `Filtering messages by ${JSON.stringify(headers, null, '\t')}`);
-
-      // Check that cataloger match! headers
-      const messages = queMessages.filter(message => {
-        if (message.properties.headers.cataloger === headers.cataloger) {
-          return true;
-        }
-
-        // Nack unwanted ones
-        channel.nack(message, false, true);
-        return false;
-      });
-
-      const records = messagesToRecords(messages);
-
-      return {headers, records, messages};
+      return queMessages;
     } catch (error) {
       logError(error);
     }
   }
 
   async function consumeOne(queue) {
-    try {
-      await channel.assertQueue(queue, {durable: true});
-
-      // Returns false if 0 items in queue
-      const message = await channel.get(queue);
-      if (message) {
-        const headers = getHeaderInfo(message);
-        const records = messagesToRecords([message]);
-        return {headers, records, messages: [message]};
-      }
-
-      return message;
-    } catch (error) {
-      logError(error);
-    }
-  }
-
-  async function consumeRaw(queue) {
     try {
       await channel.assertQueue(queue, {durable: true});
       // Returns false if 0 items in queue
@@ -131,13 +100,10 @@ export default async function (AMQP_URL) {
   function ackNReplyMessages({status, messages, payloads}) {
     logger.log('debug', 'Ack and reply messages!');
     messages.forEach((message, index) => {
-      const headers = getHeaderInfo(message);
-
       // Reply consumer gets: {"data":{"status":"UPDATED","payload":"0"}}
       sendToQueue({
         queue: message.properties.correlationId,
         correlationId: message.properties.correlationId,
-        headers,
         data: {
           status, payload: payloads[index]
         }
@@ -162,12 +128,11 @@ export default async function (AMQP_URL) {
     });
   }
 
-  async function sendToQueue({queue, correlationId, headers, data}) {
+  async function sendToQueue({queue, correlationId, data}) {
     try {
       // Logger.log('debug', `Record queue ${queue}`)
       // Logger.log('debug', `Record correlationId ${correlationId}`);
       // Logger.log('debug', `Record data ${data}`);
-      // Logger.log('debug', `Record headers ${headers}`);
 
       await channel.assertQueue(queue, {durable: true});
 
@@ -176,8 +141,7 @@ export default async function (AMQP_URL) {
         Buffer.from(JSON.stringify(data)),
         {
           correlationId,
-          persistent: true,
-          headers
+          persistent: true
         }
       );
 
@@ -237,9 +201,5 @@ export default async function (AMQP_URL) {
 
       return pump(count - 1, results.concat(message), identifiers.concat(identifier));
     }
-  }
-
-  function getHeaderInfo(data) {
-    return data.properties.headers;
   }
 }
