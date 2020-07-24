@@ -99,7 +99,7 @@ export default async function (mongoUrl) {
       jobId
     }, {
       $set: {
-        jobConfig: jobConfig,
+        jobConfig,
         modificationTime: moment().toDate()
       }
     }, {projection: {_id: 0}, returnNewDocument: true});
