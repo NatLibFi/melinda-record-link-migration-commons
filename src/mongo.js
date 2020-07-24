@@ -106,8 +106,12 @@ export default async function (mongoUrl) {
     return result.value;
   }
 
-  async function pushBlobIds({jobId, blobIds}) {
-    logger.log('debug', `Push jobItem ${jobId} blobIds list: ${blobIds.lenght}`);
+  async function pushBlobIds(order) {
+    logger.log('info', '********************************************');
+    logger.log('info', JSON.stringify(order));
+    logger.log('info', '********************************************');
+    const {jobId, blobIds} = order;
+    logger.log('debug', `Push jobItem ${jobId} blobIds list: ${blobIds}`);
     await db.collection('queue-items').updateOne({
       jobId
     }, {
