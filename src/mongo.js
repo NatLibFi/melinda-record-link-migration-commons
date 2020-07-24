@@ -46,6 +46,7 @@ export default async function (mongoUrl) {
       jobId,
       jobState,
       jobConfig,
+      blobIds: [],
       creationTime: moment().toDate(),
       modificationTime: moment().toDate()
     };
