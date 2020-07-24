@@ -95,6 +95,7 @@ export default async function (mongoUrl) {
 
   async function updateJobConfig({jobId, jobConfig}) {
     logger.log('info', `Updating job config: ${jobId}, ${JSON.stringify(jobConfig)}`);
+    // Logger.log('silly', JSON.stringify(jobConfig));
     const result = await db.collection('job-items').findOneAndUpdate({
       jobId
     }, {

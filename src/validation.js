@@ -15,7 +15,8 @@ const {createLogger} = Utils;
 const logger = createLogger();
 
 export async function createValidationFactory(validationFactoryOptions) {
-  logger.log('info', `Creating validatin factory with options: ${JSON.stringify(validationFactoryOptions)}`);
+  logger.log('verbose', 'Creating validation factory');
+  logger.log('silly', `with options: ${JSON.stringify(validationFactoryOptions)}`);
   const factoryOptions = [];
   if (validationFactoryOptions.fieldExclusion !== undefined) { // eslint-disable-line functional/no-conditional-statement
     factoryOptions.push(await fieldExclusion(validationFactoryOptions.fieldExclusion)); // eslint-disable-line functional/immutable-data
@@ -37,7 +38,6 @@ export async function createValidationFactory(validationFactoryOptions) {
   }
 
   await Promise.all(factoryOptions);
-  logger.log('debug', `Factory options:\n${JSON.stringify(factoryOptions)}`);
-  // Const validate = validateFactory([await fieldStructure([{tag: /^003$/u, valuePattern: /^FI-MELINDA$/u}])]);
+  // logger.log('verbose', `Factory options:\n${JSON.stringify(factoryOptions)}`);
   return validateFactory(factoryOptions);
 }
