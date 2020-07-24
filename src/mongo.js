@@ -35,7 +35,7 @@ export default async function (mongoUrl) {
   const client = await MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
   const db = client.db('linkker');
 
-  return {create, query, remove, getOne, setState, updateResumptionToken, pushBlobIds};
+  return {create, query, remove, getOne, setState, updateJobConfig, pushBlobIds};
 
   function create({jobId, jobState, jobConfig}) {
     if (jobState === undefined || jobConfig === undefined) { // eslint-disable-line functional/no-conditional-statement
