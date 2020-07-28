@@ -31,7 +31,7 @@ export default function () {
     logger.log('debug', `Record action fields from host: ${fieldsFromHost}`);
     logger.log('verbose', `Getting values from record ${JSON.stringify(to)}, collect: ${collect}`);
     const filteredRecords = records.filter(record => {
-
+      logger.log('debug', JSON.stringify(record));
       const [fieldsFromRecord] = subfieldsFromRecord(record, {to, collect});
       logger.log('debug', `Record action fields from host: ${fieldsFromRecord}`);
 
