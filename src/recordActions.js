@@ -28,14 +28,8 @@ export default function () {
     }
 
     logger.log('verbose', `Getting values from host record ${JSON.stringify(from)}, collect: ${collect}`);
-    logger.log('debug', `Record action fields from host: ${JSON.stringify(fieldsFromHost)}`);
-    logger.log('verbose', `Getting values from record ${JSON.stringify(to)}, collect: ${collect}`);
+    logger.log('debug', `Values from host: ${JSON.stringify(fieldsFromHost)}`);
     const filteredRecords = records.filter(record => {
-      logger.log('info', '*******************************************************************');
-      const [fieldsFromRecord] = subfieldsFromRecord(record, {from: to, collect});
-      logger.log('debug', `Record action fields from host: ${fieldsFromRecord}`);
-
-
       if (record.containsFieldWithValue(to.tag, fieldsFromHost)) {
         logger.log('debug', `Record is valid`);
         return true;
