@@ -38,6 +38,6 @@ export async function createValidationFactory(validationFactoryOptions) {
   }
 
   await Promise.all(factoryOptions);
-  // logger.log('verbose', `Factory options:\n${JSON.stringify(factoryOptions)}`);
+  // Logger.log('verbose', `Factory options:\n${JSON.stringify(factoryOptions)}`);
   return validateFactory(factoryOptions);
 }
