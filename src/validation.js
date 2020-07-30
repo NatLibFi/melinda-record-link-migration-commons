@@ -19,22 +19,28 @@ export async function createValidationFactory(validationFactoryOptions) {
   logger.log('silly', `with options: ${JSON.stringify(validationFactoryOptions)}`);
   const factoryOptions = [];
   if (validationFactoryOptions.fieldExclusion !== undefined) { // eslint-disable-line functional/no-conditional-statement
-    factoryOptions.push(await fieldExclusion(validationFactoryOptions.fieldExclusion)); // eslint-disable-line functional/immutable-data
+    const regExps = validationFactoryOptions.fieldExclusion.map(regExp => new RegExp(`${regExp}`, 'u'));
+    factoryOptions.push(await fieldExclusion(regExps)); // eslint-disable-line functional/immutable-data
   }
   if (validationFactoryOptions.fieldsPresent !== undefined) { // eslint-disable-line functional/no-conditional-statement
-    factoryOptions.push(await fieldsPresent(validationFactoryOptions.fieldsPresent)); // eslint-disable-line functional/immutable-data
+    const regExps = validationFactoryOptions.fieldsPresent.map(regExp => new RegExp(`${regExp}`, 'u'));
+    factoryOptions.push(await fieldsPresent(regExps)); // eslint-disable-line functional/immutable-data
   }
   if (validationFactoryOptions.fieldStructure !== undefined) { // eslint-disable-line functional/no-conditional-statement
-    factoryOptions.push(await fieldStructure(validationFactoryOptions.fieldStructure)); // eslint-disable-line functional/immutable-data
+    const regExps = validationFactoryOptions.fieldStructure.map(regExp => new RegExp(`${regExp}`, 'u'));
+    factoryOptions.push(await fieldStructure(regExps)); // eslint-disable-line functional/immutable-data
   }
   if (validationFactoryOptions.fixedFields !== undefined) { // eslint-disable-line functional/no-conditional-statement
-    factoryOptions.push(await fixedFields(validationFactoryOptions.fixedFields)); // eslint-disable-line functional/immutable-data
+    const regExps = validationFactoryOptions.fixedFields.map(regExp => new RegExp(`${regExp}`, 'u'));
+    factoryOptions.push(await fixedFields(regExps)); // eslint-disable-line functional/immutable-data
   }
   if (validationFactoryOptions.resolvableExtReferences !== undefined) { // eslint-disable-line functional/no-conditional-statement
-    factoryOptions.push(await resolvableExtReferences(validationFactoryOptions.resolvableExtReferences)); // eslint-disable-line functional/immutable-data
+    const regExps = validationFactoryOptions.resolvableExtReferences.map(regExp => new RegExp(`${regExp}`, 'u'));
+    factoryOptions.push(await resolvableExtReferences(regExps)); // eslint-disable-line functional/immutable-data
   }
   if (validationFactoryOptions.subfieldExclusion !== undefined) { // eslint-disable-line functional/no-conditional-statement
-    factoryOptions.push(await subfieldExclusion(validationFactoryOptions.subfieldExclusion)); // eslint-disable-line functional/immutable-data
+    const regExps = validationFactoryOptions.subfieldExclusion.map(regExp => new RegExp(`${regExp}`, 'u'));
+    factoryOptions.push(await subfieldExclusion(regExps)); // eslint-disable-line functional/immutable-data
   }
 
   await Promise.all(factoryOptions);
