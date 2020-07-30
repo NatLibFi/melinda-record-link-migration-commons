@@ -82,7 +82,7 @@ export default function () {
       return field.subfields.filter(sub => collect.includes(sub.code));
     }).flat();
 
-    return filterPump;
+    return filterPump(subfields);
 
     function filterPump(subfields, uniques = []) {
       const [sub, ...rest] = subfields;
