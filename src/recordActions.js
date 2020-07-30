@@ -70,7 +70,7 @@ export default function () {
       return false;
     }
 
-    return fields.map(field => {
+    const subfields = fields.map(field => {
       if (field.subfields === undefined) {
         return null;
       }
@@ -81,6 +81,21 @@ export default function () {
 
       return field.subfields.filter(sub => collect.includes(sub.code));
     }).flat();
+
+    return filterPump;
+
+    function filterPump(subfields, uniques = []) {
+      const [sub, ...rest] = subfields;
+      if (sub === undefined) {
+        return uniques;
+      }
+      const matches = uniques.filter(uniq => uniq.code === sub.code && uniq.value === sub.value);
+      if (matches.length > 0) {
+        return filterPump(rest, uniques);
+      }
+
+      return filterPump(rest, [...uniques, sub]);
+    }
   }
 
   // Modify
