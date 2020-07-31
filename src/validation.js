@@ -63,7 +63,7 @@ function parseRecordValidators(object, parsers = parserList) {
 }
 
 function regExpLeader(object) {
-  if (object.leader === undefiend) {
+  if (object.leader === undefined) {
     return object;
   }
 
@@ -75,7 +75,7 @@ function regExpLeader(object) {
 }
 
 function regExpTag(object) {
-  if (object.tag === undefiend) {
+  if (object.tag === undefined) {
     return object;
   }
 
@@ -87,7 +87,7 @@ function regExpTag(object) {
 }
 
 function regExpValue(object) {
-  if (object.value === undefiend) {
+  if (object.value === undefined) {
     return object;
   }
 
@@ -99,7 +99,7 @@ function regExpValue(object) {
 }
 
 function regExpValuePattern(object) {
-  if (object.valuePattern === undefiend) {
+  if (object.valuePattern === undefined) {
     return object;
   }
 
@@ -111,7 +111,7 @@ function regExpValuePattern(object) {
 }
 
 function regExpInd1(object) {
-  if (object.ind1 === undefiend) {
+  if (object.ind1 === undefined) {
     return object;
   }
 
@@ -123,7 +123,7 @@ function regExpInd1(object) {
 }
 
 function regExpInd2(object) {
-  if (object.ind2 === undefiend) {
+  if (object.ind2 === undefined) {
     return object;
   }
 
@@ -135,7 +135,7 @@ function regExpInd2(object) {
 }
 
 function regExpSubfields(object) {
-  if (object.subfields === undefiend) {
+  if (object.subfields === undefined) {
     return object;
   }
 
@@ -164,7 +164,7 @@ function regExpSubfields(object) {
 }
 
 function regExpCode(object) {
-  if (object.code === undefiend) {
+  if (object.code === undefined) {
     return object;
   }
 
@@ -176,7 +176,7 @@ function regExpCode(object) {
 }
 
 function regExpPattern(object) {
-  if (object.pattern === undefiend) {
+  if (object.pattern === undefined) {
     return object;
   }
 
@@ -188,7 +188,7 @@ function regExpPattern(object) {
 }
 
 function booleanRequired(object) {
-  if (object.required === undefiend) {
+  if (object.required === undefined) {
     return object;
   }
 
@@ -200,7 +200,7 @@ function booleanRequired(object) {
 }
 
 function numberMaxOccurrence(object) {
-  if (object.maxOccurrence === undefiend) {
+  if (object.maxOccurrence === undefined) {
     return object;
   }
 
@@ -212,7 +212,7 @@ function numberMaxOccurrence(object) {
 }
 
 function booleanStrict(object) {
-  if (object.strict === undefiend) {
+  if (object.strict === undefined) {
     return object;
   }
 
@@ -224,7 +224,7 @@ function booleanStrict(object) {
 }
 
 function parseDependencies(object) {
-  if (object.dependencies === undefiend) {
+  if (object.dependencies === undefined) {
     return object;
   }
 
