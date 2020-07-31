@@ -55,6 +55,10 @@ function parseRecordValidators(object, parsers = parserList) {
 }
 
 function regExpLeader(object) {
+  if (object.leader === undefiend) {
+    return object;
+  }
+
   if (typeof object.leader === 'string') {
     return {...object, leader: new RegExp(`${object.leader}`, 'u')};
   }
@@ -63,6 +67,10 @@ function regExpLeader(object) {
 }
 
 function regExpTag(object) {
+  if (object.tag === undefiend) {
+    return object;
+  }
+
   if (typeof object.tag === 'string') {
     return {...object, tag: new RegExp(`${object.tag}`, 'u')};
   }
@@ -71,6 +79,10 @@ function regExpTag(object) {
 }
 
 function regExpValue(object) {
+  if (object.value === undefiend) {
+    return object;
+  }
+
   if (typeof object.value === 'string') {
     return {...object, value: new RegExp(`${object.value}`, 'u')};
   }
@@ -79,6 +91,10 @@ function regExpValue(object) {
 }
 
 function regExpValuePattern(object) {
+  if (object.valuePattern === undefiend) {
+    return object;
+  }
+
   if (typeof object.valuePattern === 'string') {
     return {...object, valuePattern: new RegExp(`${object.valuePattern}`, 'u')};
   }
@@ -87,6 +103,10 @@ function regExpValuePattern(object) {
 }
 
 function regExpInd1(object) {
+  if (object.ind1 === undefiend) {
+    return object;
+  }
+
   if (typeof object.ind1 === 'string') {
     return {...object, ind1: new RegExp(`${object.ind1}`, 'u')};
   }
@@ -95,6 +115,10 @@ function regExpInd1(object) {
 }
 
 function regExpInd2(object) {
+  if (object.ind2 === undefiend) {
+    return object;
+  }
+
   if (typeof object.ind2 === 'string') {
     return {...object, ind2: new RegExp(`${object.ind2}`, 'u')};
   }
@@ -103,7 +127,11 @@ function regExpInd2(object) {
 }
 
 function regExpSubfields(object) {
-  if (Array.isArray(object.subfields)) {
+  if (object.subfields === undefiend) {
+    return object;
+  }
+
+  if (Array.isArray(object.subfields) && object.subfields.length > 0) {
     const subfields = object.subfields.map(sub => {
       const sub2 = regExpCode(sub);
       const sub3 = regExpValue(sub2);
@@ -128,6 +156,10 @@ function regExpSubfields(object) {
 }
 
 function regExpCode(object) {
+  if (object.code === undefiend) {
+    return object;
+  }
+
   if (typeof object.code === 'string') {
     return {...object, code: new RegExp(`${object.code}`, 'u')};
   }
@@ -136,6 +168,10 @@ function regExpCode(object) {
 }
 
 function regExpPattern(object) {
+  if (object.pattern === undefiend) {
+    return object;
+  }
+
   if (typeof object.pattern === 'string') {
     return {...object, pattern: new RegExp(`${object.pattern}`, 'u')};
   }
@@ -144,6 +180,10 @@ function regExpPattern(object) {
 }
 
 function booleanRequired(object) {
+  if (object.required === undefiend) {
+    return object;
+  }
+
   if (typeof object.required === 'string') {
     return {...object, required: Boolean.parseBoolean(object.required)};
   }
@@ -152,6 +192,10 @@ function booleanRequired(object) {
 }
 
 function numberMaxOccurrence(object) {
+  if (object.maxOccurrence === undefiend) {
+    return object;
+  }
+
   if (typeof object.maxOccurrence === 'string') {
     return {...object, maxOccurrence: parseInt(object.maxOccurrence, 10)};
   }
@@ -160,14 +204,22 @@ function numberMaxOccurrence(object) {
 }
 
 function booleanStrict(object) {
+  if (object.strict === undefiend) {
+    return object;
+  }
+
   if (typeof object.strict === 'string') {
-    return {...object, strict: Boolean.parseBoolean(object.stric)};
+    return {...object, strict: Boolean.parseBoolean(object.strict)};
   }
 
   return object;
 }
 
 function parseDependencies(object) {
+  if (object.dependencies === undefiend) {
+    return object;
+  }
+
   if (Array.isArray(object.dependencies) && object.dependencies.lenght > 0) {
     const parsers = [regExpLeader, regExpTag, regExpInd1, regExpInd2, regExpValuePattern, regExpSubfields];
     const parsed = object.dependencies.map(dep => parseRecordValidators(dep, parsers));
