@@ -43,7 +43,7 @@ function parseValidatorPump(validators, parsed = []) {
     return parsed;
   }
 
-  if (typeof value === 'string') {
+  if (typeof validator === 'string') {
     return parseValidatorPump(rest, [...parsed, new RegExp(`${validator}`, 'u')]);
   }
 
