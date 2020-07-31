@@ -46,12 +46,14 @@ function parseValidatorPump(values, parsed = []) {
 }
 
 function parseRecordValidators(object, parsers = parserList) {
+  logger.log('debug', JSON.stringify(object));
   const [parser, ...rest] = parsers;
   if (parser === undefined) {
     return object;
   }
 
-  return parseRecordValidators(parser(object), rest);
+  const parsed = parser(object);
+  return parseRecordValidators(parsed, rest);
 }
 
 function regExpLeader(object) {
