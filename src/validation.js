@@ -37,8 +37,9 @@ export async function createValidationFactory(validationFactoryOptions) {
 const parserList = [regExpLeader, regExpTag, regExpValue, regExpValuePattern, regExpInd1, regExpInd2, regExpSubfields, booleanStrict, parseDependencies];
 
 function parseValidatorPump(validators, parsed = []) {
-  const [validator, ...rest] = values;
+  const [validator, ...rest] = validators;
   if (validator === undefined) {
+    logger.log('info', `Parsed validators: ${JSON.stringify(parsed)}`);
     return parsed;
   }
 
