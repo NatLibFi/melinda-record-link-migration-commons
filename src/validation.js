@@ -44,6 +44,7 @@ function parseValidatorPump(validators, parsed = []) {
   }
 
   if (typeof validator === 'string') {
+    logger.log('info', `Parsed validator: ${JSON.stringify(validator)}`);
     return parseValidatorPump(rest, [...parsed, new RegExp(`${validator}`, 'u')]);
   }
 
@@ -52,9 +53,9 @@ function parseValidatorPump(validators, parsed = []) {
 }
 
 function parseRecordValidators(object, parsers = parserList) {
-  logger.log('debug', JSON.stringify(object));
   const [parser, ...rest] = parsers;
   if (parser === undefined) {
+    logger.log('info', `Parsed validator: ${JSON.stringify(object)}`);
     return object;
   }
 
