@@ -36,12 +36,17 @@ export async function createValidationFactory(validationFactoryOptions) {
 
 const parserList = [regExpLeader, regExpTag, regExpValue, regExpValuePattern, regExpInd1, regExpInd2, regExpSubfields, booleanStrict, parseDependencies];
 
-function parseValidatorPump(values, parsed = []) {
-  const [value, ...rest] = values;
-  if (typeof value === 'string') {
-    return parseValidatorPump(rest, [...parsed, new RegExp(`${value}`, 'u')]);
+function parseValidatorPump(validators, parsed = []) {
+  const [validator, ...rest] = values;
+  if (validator === undefined) {
+    return parsed;
   }
-  const parsedValidator = parseRecordValidators(value, parserList);
+
+  if (typeof value === 'string') {
+    return parseValidatorPump(rest, [...parsed, new RegExp(`${validator}`, 'u')]);
+  }
+
+  const parsedValidator = parseRecordValidators(validator, parserList);
   return parseValidatorPump(rest, [...parsed, parsedValidator]);
 }
 
