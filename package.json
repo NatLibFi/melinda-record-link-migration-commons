@@ -30,11 +30,11 @@
 		"build": "babel src --source-maps --copy-files --delete-dir-on-start --out-dir=dist --minified"
 	},
 	"dependencies": {
-		"@natlibfi/melinda-commons": "git+https://github.com/NatLibFi/melinda-commons-js.git#melkehitys-1541",
-		"@natlibfi/marc-record": "^4.0.1",
-		"@natlibfi/marc-record-serializers": "^5.0.1",
-		"@natlibfi/marc-record-validate": "5.0.1",
-		"@natlibfi/marc-record-validators-melinda": "8.2.3",
+		"@natlibfi/melinda-commons": "^11.0.1",
+		"@natlibfi/marc-record": "^6.1.1",
+		"@natlibfi/marc-record-serializers": "^7.1.6",
+		"@natlibfi/marc-record-validate": "^6.0.1",
+		"@natlibfi/marc-record-validators-melinda": "^8.2.5",
 		"@natlibfi/melinda-record-import-commons": "^8.0.1",
 		"amqplib": ">=0.5.5 <1.0.0",
 		"moment": "^2.24.0",
