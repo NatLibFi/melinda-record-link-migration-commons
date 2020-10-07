@@ -113,15 +113,14 @@ export default async function (mongoUrl) {
     logger.log('info', '********************************************');
     const {jobId, blobIds} = order;
     logger.log('debug', `Push jobItem ${jobId} blobIds list: ${blobIds}`);
-    logger.log('debug', typeof blobIds)
     const ids = blobIds.map(id => id);
+    logger.log('debug', typeof ids);
+    logger.log('debug', JSON.stringify(ids));
     await db.collection('queue-items').updateOne({
       jobId
     }, {
-      $addToSet: {
-        blobIds: {$each: [...ids]}
-      },
       $set: {
+        blobIds: ids,
         modificationTime: moment().toDate()
       }
     });
