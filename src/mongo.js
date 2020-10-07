@@ -122,7 +122,7 @@ export default async function (mongoUrl) {
         modificationTime: moment().toDate()
       },
       $push: {
-        blobIds: {$each: ids}
+        blobIds: {$each: [...ids]}
       }
     });
   }
