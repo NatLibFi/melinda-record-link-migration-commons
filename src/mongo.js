@@ -1,7 +1,8 @@
 import {MongoClient} from 'mongodb';
-import {Error as ApiError, Utils} from '@natlibfi/melinda-commons';
+import {Error as ApiError} from '@natlibfi/melinda-commons';
+import {createLogger} from '@natlibfi/melinda-backend-commons';
 import moment from 'moment';
-
+import {logError} from './utils';
 /* JobItem:
 {
   "jobId": "FOO"
@@ -29,7 +30,6 @@ import moment from 'moment';
 */
 
 export default async function (mongoUrl) {
-  const {createLogger, logError} = Utils;
   const logger = createLogger();
   // Connect to mongo (MONGO)
   const client = await MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});

@@ -7,9 +7,8 @@ import {
   FieldStructure as fieldStructure,
   SubfieldExclusion as subfieldExclusion
 } from '@natlibfi/marc-record-validators-melinda';
-import {Utils} from '@natlibfi/melinda-commons';
+import {createLogger} from '@natlibfi/melinda-backend-commons';
 
-const {createLogger} = Utils;
 const logger = createLogger();
 
 export async function createValidationFactory(validationFactoryOptions) {

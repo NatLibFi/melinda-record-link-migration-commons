@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars */
-import {Utils} from '@natlibfi/melinda-commons';
+import {createLogger} from '@natlibfi/melinda-backend-commons';
 import {format} from 'util';
 import {sortSubfields} from './utils';
 
 export default function () {
-  const {createLogger} = Utils;
   const logger = createLogger(); // eslint-disable-line no-unused-vars
 
   return {convertLinkDataToControlFields, convertLinkDataToDataFields};

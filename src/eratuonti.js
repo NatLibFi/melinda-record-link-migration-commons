@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars, */
 
-import {Utils} from '@natlibfi/melinda-commons';
+import {createLogger} from '@natlibfi/melinda-backend-commons';
 import {createApiClient} from '@natlibfi/melinda-record-import-commons';
 
 export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, linkDataHarvesterApiProfileId}) {
-  const {createLogger} = Utils;
   const logger = createLogger();
   logger.log('verbose', 'Connecting to erätuonti');
   const client = createApiClient({
