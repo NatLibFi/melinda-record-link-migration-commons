@@ -113,6 +113,8 @@ export default async function (mongoUrl) {
     logger.log('info', '********************************************');
     const {jobId, blobIds} = order;
     logger.log('debug', `Push jobItem ${jobId} blobIds list: ${blobIds}`);
+    logger.log('debug', typeof blobIds)
+    const ids = blobIds.map(id => id);
     await db.collection('queue-items').updateOne({
       jobId
     }, {
@@ -120,7 +122,7 @@ export default async function (mongoUrl) {
         modificationTime: moment().toDate()
       },
       $push: {
-        blobIds: {$each: blobIds}
+        blobIds: {$each: ids}
       }
     });
   }
