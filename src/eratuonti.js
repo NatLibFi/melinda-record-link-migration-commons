@@ -39,4 +39,9 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
 
     return false;
   }
+
+  async function queryBlobs(id) {
+    // Possible queries ['state', 'profile', 'contentType', 'creationTime', 'modificationTime'];
+    return id;
+  }
 }
