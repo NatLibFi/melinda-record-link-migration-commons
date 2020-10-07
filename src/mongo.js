@@ -118,11 +118,11 @@ export default async function (mongoUrl) {
     await db.collection('queue-items').updateOne({
       jobId
     }, {
+      $addToSet: {
+        blobIds: {$each: [...ids]}
+      },
       $set: {
         modificationTime: moment().toDate()
-      },
-      $push: {
-        blobIds: {$each: [...ids]}
       }
     });
   }
