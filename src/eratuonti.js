@@ -11,7 +11,7 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
     userAgent: apiClientUserAgent
   });
 
-  return {sendBlob};
+  return {sendBlob, readBlob};
 
   // Send record to transformer
   async function sendBlob(linkedValids) {
@@ -40,8 +40,9 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
     return false;
   }
 
-  async function queryBlobs(id) {
-    // Possible queries ['state', 'profile', 'contentType', 'creationTime', 'modificationTime'];
+  async function readBlob(id) {
+    const result = await client.getBlobMetadata({id});
+    logger.log('debug', JSON.stringify(result));
     return id;
   }
 }
