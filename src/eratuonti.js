@@ -2,6 +2,7 @@
 
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 import {createApiClient} from '@natlibfi/melinda-record-import-commons';
+import {logError} from './utils';
 
 export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, linkDataHarvesterApiProfileId}) {
   const logger = createLogger();
@@ -18,9 +19,9 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
     const blob = JSON.stringify(linkedValids);
     const type = 'application/json';
     const profile = linkDataHarvesterApiProfileId;
-    // Logger.log('debug', profile);
-    // Logger.log('debug', type);
-    // Logger.log('debug', blob);
+    logger.log('debug', profile);
+    logger.log('debug', type);
+    logger.log('debug', blob);
     logger.log('info', 'Data sending to Erätuonti service has begun!');
     if (blob) { // eslint-disable-line functional/no-conditional-statement
       try {
@@ -32,7 +33,8 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
         return response;
         // TRANSFORMER picks it from QUEUE
       } catch (error) {
-        logger.log('error', error);
+        logError(error);
+        loggger.log('error', JSON.stringify(error));
         return false;
       }
     }

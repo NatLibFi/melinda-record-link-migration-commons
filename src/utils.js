@@ -25,7 +25,7 @@ export function logError(error) {
 
     return;
   }
-  if (err === 'SIGINT') {
+  if (error === 'SIGINT') {
     logger.log('error', error.stack === undefined ? error : `${error}\n${error.stack}`);
 
     return;
