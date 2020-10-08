@@ -19,9 +19,9 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
     const blob = JSON.stringify(linkedValids);
     const type = 'application/json';
     const profile = linkDataHarvesterApiProfileId;
-    logger.log('debug', profile);
-    logger.log('debug', type);
-    logger.log('debug', blob);
+    // logger.log('debug', profile);
+    // logger.log('debug', type);
+    // logger.log('debug', blob);
     logger.log('info', 'Data sending to Erätuonti service has begun!');
     if (blob) { // eslint-disable-line functional/no-conditional-statement
       try {
