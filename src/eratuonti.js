@@ -34,7 +34,7 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
         // TRANSFORMER picks it from QUEUE
       } catch (error) {
         logError(error);
-        loggger.log('error', JSON.stringify(error));
+        logger.log('error', JSON.stringify(error));
         return false;
       }
     }
