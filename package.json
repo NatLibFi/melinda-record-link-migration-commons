@@ -19,7 +19,6 @@
 	"engines": {
 		"node": "^12"
 	},
-	"private": true,
 	"scripts": {
 		"prepare": "npm run build",
 		"lint": "eslint ./src",
