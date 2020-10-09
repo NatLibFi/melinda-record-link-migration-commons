@@ -3,6 +3,7 @@ import {Error as ApiError} from '@natlibfi/melinda-commons';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 import moment from 'moment';
 import {logError} from './utils';
+
 /* JobItem:
 {
   "jobId": "FOO"

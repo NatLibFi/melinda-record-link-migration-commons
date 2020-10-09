@@ -19,9 +19,9 @@ export function sortSubfields(order, subfields, orderedSubfields = []) {
 
 export function logError(error) {
   if (error instanceof CommonsError) {
-    logger.log('error', `Error status: ${status}`);
-    logger.log('error', `Error payload: ${typeof payload === 'object' ? `\n${JSON.stringify(payload, undefined, 2)}` : payload}`);
-    logger.log('error', `Error stack:\n${this.stack === undefined ? '' : this.stack}`);
+    logger.log('error', `Error status: ${error.status}`);
+    logger.log('error', `Error payload: ${typeof error.payload === 'object' ? `\n${JSON.stringify(error.payload, undefined, 2)}` : error.payload}`);
+    logger.log('error', `Error stack:\n${error.stack === undefined ? '' : error.stack}`);
 
     return;
   }
