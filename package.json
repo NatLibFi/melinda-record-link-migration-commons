@@ -1,5 +1,5 @@
 {
-	"name": "@natlibfi/melinda-rest-api-commons",
+	"name": "@natlibfi/melinda-record-link-migration-commons",
 	"description": "Shared modules for microservices of Melinda record link migration system",
 	"author": {
 		"name": "The National Library of Finland"
