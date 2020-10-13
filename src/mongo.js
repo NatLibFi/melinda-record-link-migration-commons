@@ -82,10 +82,10 @@ export default async function (mongoUrl) {
     }
   }
 
-  function getById(id){
+  function getById(id) {
     try {
       logger.log('debug', `Checking DB for id: ${id}`);
-      return db.collection('job-items').findOne({jobId: id})
+      return db.collection('job-items').findOne({jobId: id});
     } catch (error) {
       logError(error);
       return false;
