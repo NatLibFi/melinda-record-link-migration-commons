@@ -13,7 +13,7 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
     userAgent: apiClientUserAgent
   });
 
-  return {sendBlob, readBlob};
+  return {sendBlob, readBlob, readBlobContent};
 
   // Send record to transformer
   async function sendBlob(linkedValids) {
@@ -44,8 +44,25 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
   }
 
   async function readBlob(id) {
-    const result = await client.getBlobMetadata({id});
-    // logger.log('debug', JSON.stringify(result));
-    return result;
+    try {
+      const result = await client.getBlobMetadata({id});
+      // logger.log('debug', JSON.stringify(result));
+      return result;
+    } catch (error) {
+      logger.log('error', 'Error while reading blob from erätuonti!');
+      logError(error);
+      return false;
+    }
+  }
+
+  async function readBlobContent(id) {
+    try {
+      const result = await client.getBlobContent({id});
+      return result;
+    } catch (error) {
+      logger.log('error', 'Error while reading blob content from erätuonti!');
+      logError(error);
+      return false;
+    }
   }
 }
