@@ -79,7 +79,7 @@ export default function () {
       }
 
       return field.subfields.filter(sub => collect.includes(sub.code));
-    }).flat();
+    });
 
     return filterPump(subfields);
 
