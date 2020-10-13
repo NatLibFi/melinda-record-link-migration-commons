@@ -4,6 +4,9 @@ import {Error as ApiError} from '@natlibfi/melinda-commons';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 import {createApiClient} from '@natlibfi/melinda-record-import-commons';
 import {logError} from './utils';
+import {chain} from 'stream-chain';
+import {parser} from 'stream-json';
+import {streamArray} from 'stream-json/streamers/StreamArray';
 
 export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, linkDataHarvesterApiProfileId}) {
   const logger = createLogger();
@@ -55,14 +58,33 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
     }
   }
 
-  async function readBlobContent(id) {
+  function readBlobContent(id) {
     try {
-      const result = await client.getBlobContent({id});
+      const result = readStream(client.getBlobContent({id}));
       return result;
     } catch (error) {
       logger.log('error', 'Error while reading blob content from erätuonti!');
       logError(error);
       return false;
+    }
+
+    function readStream(stream) {
+      const results = [];
+
+      try {
+        const pipeline = chain([
+          stream,
+          parser(),
+          streamArray()
+        ]);
+
+        pipeline.on('data', data => {
+          results.push(data.value); // eslint-disable-line functional/immutable-data
+        });
+        pipeline.on('end', () => results);
+      } catch (err) {
+        logError(err);
+      }
     }
   }
 }
