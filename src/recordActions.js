@@ -102,34 +102,36 @@ export default function () {
   function replaceValueInField(sourceRecord, record, change) {
     // TEST {from, to, order} = change;
     const {from, to} = change;
-    const changeValue = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
-    logger.log('info', `Change value ${changeValue}`);
+    const changeValues = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
+    logger.log('info', `Change value ${changeValues}`);
 
-    const formatedChangeValue = toFormat(to, changeValue);
-    logger.log('info', `Formated change value ${JSON.stringify(formatedChangeValue)}`);
+    for (const changeValue in changeValues) {
+      const formatedChangeValue = toFormat(to, changeValue);
+      logger.log('info', `Formated change value ${JSON.stringify(formatedChangeValue)}`);
 
-    const filterSubfields = subfieldsFromRecord(sourceRecord, to.where);
-    logger.log('info', `Filter subfields ${JSON.stringify(filterSubfields)}`);
+      const filterSubfields = subfieldsFromRecord(sourceRecord, to.where);
+      logger.log('info', `Filter subfields ${JSON.stringify(filterSubfields)}`);
 
-    const filteredFields = record.getFields(to.where.to.tag, filterSubfields);
-    logger.log('info', `Filtered fields ${JSON.stringify(filteredFields)}`);
+      const filteredFields = record.getFields(to.where.to.tag, filterSubfields);
+      logger.log('info', `Filtered fields ${JSON.stringify(filteredFields)}`);
 
-    filteredFields.forEach(field => {
-      if (JSON.stringify(field.subfields).indexOf(JSON.stringify(formatedChangeValue)) > -1) {
-        return;
-      }
+      filteredFields.forEach(field => {
+        if (JSON.stringify(field.subfields).indexOf(JSON.stringify(formatedChangeValue)) > -1) {
+          return;
+        }
 
-      const orderedSubfields = sortSubfields(change.order, [...field.subfields, formatedChangeValue]);
+        const orderedSubfields = sortSubfields(change.order, [...field.subfields, formatedChangeValue]);
 
-      record.insertField({
-        tag: field.tag,
-        ind1: field.ind1,
-        ind2: field.ind2,
-        subfields: orderedSubfields
+        record.insertField({
+          tag: field.tag,
+          ind1: field.ind1,
+          ind2: field.ind2,
+          subfields: orderedSubfields
+        });
+
+        record.removeField(field);
       });
-
-      record.removeField(field);
-    });
+    }
 
     return record;
 
