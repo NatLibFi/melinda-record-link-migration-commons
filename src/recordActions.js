@@ -109,7 +109,7 @@ export default function () {
       const formatedChangeValue = toFormat(to, changeValue);
       logger.log('info', `Formated change value ${JSON.stringify(formatedChangeValue)}`);
 
-      const filterSubfields = subfieldsFromRecord(sourceRecord, to.where);
+      const filterSubfields = subfieldsFromRecord(sourceRecord, to.where).flat();
       logger.log('info', `Filter subfields ${JSON.stringify(filterSubfields)}`);
 
       const filteredFields = record.getFields(to.where.to.tag, filterSubfields);
