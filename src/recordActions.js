@@ -105,7 +105,7 @@ export default function () {
     const changeValues = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
     logger.log('info', `Change value ${changeValues}`);
 
-    for (const changeValue in changeValues) {
+    changeValues.forEach(changeValue => {
       const formatedChangeValue = toFormat(to, changeValue);
       logger.log('info', `Formated change value ${JSON.stringify(formatedChangeValue)}`);
 
@@ -131,7 +131,7 @@ export default function () {
 
         record.removeField(field);
       });
-    }
+    });
 
     return record;
 
