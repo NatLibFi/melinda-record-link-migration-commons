@@ -6,7 +6,7 @@ import {sortSubfields} from './utils';
 export default function () {
   const logger = createLogger(); // eslint-disable-line no-unused-vars
 
-  return {filterRecordsBy, filterExistingFields, valuesFromRecord, subfieldsFromRecord, replaceValueInField, addOrReplaceDataFields};
+  return {filterRecordsBy, filterExistingFields, valuesFromRecord, subfieldsFromRecord, replaceValueInField, addOrReplaceDataFields, removeSubfields};
 
   // Filter & sort
 
@@ -21,23 +21,27 @@ export default function () {
     to: {tag: '100'}
     */
 
-    const fieldsFromSource = subfieldsFromRecord(sourceRecord, {from, collect});
-    if (fieldsFromSource.length < 1) {
+    const subfieldsFromSource = subfieldsFromRecord(sourceRecord, {from, collect});
+    if (subfieldsFromSource.length < 1) {
       return false;
     }
 
     logger.log('verbose', `Getting values from source record ${JSON.stringify(from)}, collect: ${collect}`);
-    logger.log('debug', `Values from source: ${JSON.stringify(fieldsFromSource)}`);
+    logger.log('debug', `Values from source: ${JSON.stringify(subfieldsFromSource)}`);
     const filteredRecords = records.filter(record => {
-      if (record.containsFieldWithValue(to.tag, fieldsFromSource)) {
-        logger.log('debug', `Record is valid`);
-        return true;
-      }
-
-      return false;
+      const fields = record.fields.filter(f => f.tag === to.tag); // eslint-disable-line functional/no-this-expression
+      const validFields = fields.filter(field => subfieldsFromSource.every(sfQuery => field.subfields.some(sf => sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value))));
+      return validFields.length > 0;
     });
 
     return filteredRecords;
+
+    // Normalize values to loosen the mathcing. Example: $a Kekkonen, Urho, or $a Kekkonen, Urho. matches to $a Kekkonen, Urho
+    function normalize(value) {
+      return value
+        .replace(/[^\w\s\p{Alphabetic}]/gu, '')
+        .trim();
+    }
   }
 
   function filterExistingFields(linkDataFields, record) {
@@ -161,5 +165,30 @@ export default function () {
     });
 
     return record;
+  }
+
+  function removeSubfields(record, config) {
+    const tagRegexp = new RegExp(`${config.tag}`, 'u');
+    const valueRegexp = new RegExp(`${config.value}`, 'u');
+    const fields = record.getFields(tagRegexp);
+    const updatedFields = fields.map(field => {
+      logger.log('debug', JSON.stringify(field));
+      const {tag, ind1, ind2, subfields} = field;
+      const updatedSubs = subfields.filter(sub => {
+        if (sub.code === config.code && valueRegexp.test(sub.value)) {
+          logger.log('debug', 'filtering out subfield');
+          return false;
+        }
+
+        return true;
+      });
+
+      return {
+        tag, ind1, ind2, subfields: updatedSubs
+      };
+    });
+
+    fields.forEach(field => record.removeField(field));
+    updatedFields.forEach(field => record.insertField(field));
   }
 }
