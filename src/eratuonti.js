@@ -4,9 +4,6 @@ import {Error as ApiError} from '@natlibfi/melinda-commons';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 import {createApiClient} from '@natlibfi/melinda-record-import-commons';
 import {logError} from './utils';
-import {chain} from 'stream-chain';
-import {parser} from 'stream-json';
-import {streamArray} from 'stream-json/streamers/StreamArray';
 
 export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, linkDataHarvesterApiProfileId}) {
   const logger = createLogger();

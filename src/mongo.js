@@ -9,7 +9,7 @@ import {logError} from './utils';
   "jobId": "FOO"
   "jobState":"PENDING_SRU_HARVESTER",
   "jobConfig": {
-    hostRecord: MarcRecord,
+    sourceRecord: MarcRecord,
     apiHarvesterProfileId: 'viola-aut-migration',
     search: {
       from: {tag: '100', value: {code: 'a'}},

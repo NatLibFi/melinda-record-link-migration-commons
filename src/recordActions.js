@@ -21,15 +21,15 @@ export default function () {
     to: {tag: '100'}
     */
 
-    const fieldsFromHost = subfieldsFromRecord(sourceRecord, {from, collect});
-    if (fieldsFromHost.length < 1) {
+    const fieldsFromSource = subfieldsFromRecord(sourceRecord, {from, collect});
+    if (fieldsFromSource.length < 1) {
       return false;
     }
 
-    logger.log('verbose', `Getting values from host record ${JSON.stringify(from)}, collect: ${collect}`);
-    logger.log('debug', `Values from host: ${JSON.stringify(fieldsFromHost)}`);
+    logger.log('verbose', `Getting values from source record ${JSON.stringify(from)}, collect: ${collect}`);
+    logger.log('debug', `Values from source: ${JSON.stringify(fieldsFromSource)}`);
     const filteredRecords = records.filter(record => {
-      if (record.containsFieldWithValue(to.tag, fieldsFromHost)) {
+      if (record.containsFieldWithValue(to.tag, fieldsFromSource)) {
         logger.log('debug', `Record is valid`);
         return true;
       }
