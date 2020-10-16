@@ -21,7 +21,7 @@ export default function () {
     to: {tag: '100'}
     */
 
-    const subfieldsFromSource = subfieldsFromRecord(sourceRecord, {from, collect});
+    const subfieldsFromSource = subfieldsFromRecord(sourceRecord, {from, collect}).flat();
     if (subfieldsFromSource.length < 1) {
       return false;
     }
