@@ -16,7 +16,7 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
     userAgent: apiClientUserAgent
   });
 
-  return {sendBlob, readBlob, readBlobContent};
+  return {sendBlob, readBlob, updateBlobState};
 
   // Send record to transformer
   async function sendBlob(linkedValids) {
@@ -58,33 +58,15 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
     }
   }
 
-  function readBlobContent(id) {
+  async function updateBlobState(id, state) {
     try {
-      const result = readStream(client.getBlobContent({id}));
+      const result = await client.updateState({id, state});
+      // logger.log('debug', JSON.stringify(result));
       return result;
     } catch (error) {
-      logger.log('error', 'Error while reading blob content from erätuonti!');
+      logger.log('error', 'Error while updating blob state to erätuonti!');
       logError(error);
       return false;
-    }
-
-    function readStream(stream) {
-      const results = [];
-
-      try {
-        const pipeline = chain([
-          stream,
-          parser(),
-          streamArray()
-        ]);
-
-        pipeline.on('data', data => {
-          results.push(data.value); // eslint-disable-line functional/immutable-data
-        });
-        pipeline.on('end', () => results);
-      } catch (err) {
-        logError(err);
-      }
     }
   }
 }
