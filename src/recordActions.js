@@ -36,7 +36,8 @@ export default function () {
 
     const validIds = filteredRecords.map(record => {
       const [f001] = record.get('001');
-      return f001;
+      const [f003] = record.get('003');
+      return [f001, f003];
     });
 
     logger.log('debug', JSON.stringify(validIds));
