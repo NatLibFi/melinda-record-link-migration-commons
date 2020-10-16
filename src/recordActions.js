@@ -34,6 +34,13 @@ export default function () {
       return validFields.length > 0;
     });
 
+    const validIds = filteredRecords.map(record => {
+      const [f001] = record.get('001');
+      return f001;
+    });
+
+    logger.log('debug', JSON.stringify(validIds));
+
     return filteredRecords;
 
     // Normalize values to loosen the mathcing. Example: $a Kekkonen, Urho, or $a Kekkonen, Urho. matches to $a Kekkonen, Urho
