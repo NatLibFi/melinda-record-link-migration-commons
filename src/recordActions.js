@@ -29,7 +29,7 @@ export default function () {
     logger.log('verbose', `Getting values from source record ${JSON.stringify(from)}, collect: ${collect}`);
     logger.log('debug', `Values from source: ${JSON.stringify(subfieldsFromSource)}`);
     const filteredRecords = records.filter(record => {
-      const fields = record.fields.filter(f => f.tag === to.tag); // eslint-disable-line functional/no-this-expression
+      const fields = record.get(new RegExp(`^${to.tag}$`, 'u'));
       const validFields = fields.filter(field => subfieldsFromSource.every(sfQuery => field.subfields.some(sf => sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value))));
       return validFields.length > 0;
     });
@@ -45,11 +45,7 @@ export default function () {
     return filteredRecords;
 
     // Normalize values to loosen the mathcing. Example: $a Kekkonen, Urho, or $a Kekkonen, Urho. matches to $a Kekkonen, Urho
-    function normalize(value) {
-      return value
-        .replace(/[^\w\s\p{Alphabetic}]/gu, '')
-        .trim();
-    }
+
   }
 
   function filterExistingFields(linkDataFields, record) {
@@ -124,7 +120,8 @@ export default function () {
       const filterSubfields = subfieldsFromRecord(sourceRecord, to.where).flat();
       logger.log('info', `Filter subfields ${JSON.stringify(filterSubfields)}`);
 
-      const filteredFields = record.getFields(to.where.to.tag, filterSubfields);
+      const fields = record.get(new RegExp(`^${to.where.to.tag}$`, 'u'));
+      const filteredFields = fields.filter(field => filterSubfields.every(sfQuery => field.subfields.some(sf => sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value))));
       logger.log('info', `Filtered fields ${JSON.stringify(filteredFields)}`);
 
       filteredFields.forEach(field => {
@@ -198,5 +195,11 @@ export default function () {
 
     fields.forEach(field => record.removeField(field));
     updatedFields.forEach(field => record.insertField(field));
+  }
+
+  function normalize(value) {
+    return value
+      .replace(/[^\w\s\p{Alphabetic}]/gu, '')
+      .trim();
   }
 }
