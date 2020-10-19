@@ -3,13 +3,26 @@ import {Error as CommonsError} from '@natlibfi/melinda-commons';
 const logger = createLogger();
 
 export function sortSubfields(order, subfields, orderedSubfields = []) {
-  const [code, ...rest] = order;
-  if (code === undefined) {
+  const [filter, ...rest] = order;
+  if (filter === undefined) {
     return [...orderedSubfields, ...subfields];
   }
 
-  const filtered = subfields.filter(sub => sub.code === code);
-  const restSubfields = subfields.filter(sub => sub.code !== code);
+  const filtered = subfields.filter(sub => {
+    if (typeof filter === 'string') {
+      return sub.code === filter;
+    }
+
+    return sub.code === filter.code && new RegExp(filter.value).test(sub.value);
+  });
+
+  const restSubfields = subfields.filter(sub => {
+    if (typeof filter === 'string') {
+      return sub.code !== filter;
+    }
+
+    return sub.code !== filter.code && !new RegExp(filter.value).test(sub.value);
+  });
   if (filtered.length > 0) {
     return sortSubfields(rest, restSubfields, [...orderedSubfields, ...filtered]);
   }
