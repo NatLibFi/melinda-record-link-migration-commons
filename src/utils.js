@@ -13,7 +13,7 @@ export function sortSubfields(order, subfields, orderedSubfields = []) {
       return sub.code === filter;
     }
 
-    return sub.code === filter.code && new RegExp(filter.value).test(sub.value);
+    return sub.code === filter.code && new RegExp(filter.value, 'u').test(sub.value);
   });
 
   const restSubfields = subfields.filter(sub => {
@@ -21,7 +21,7 @@ export function sortSubfields(order, subfields, orderedSubfields = []) {
       return sub.code !== filter;
     }
 
-    return sub.code !== filter.code && !new RegExp(filter.value).test(sub.value);
+    return sub.code !== filter.code && !new RegExp(filter.value, 'u').test(sub.value);
   });
   if (filtered.length > 0) {
     return sortSubfields(rest, restSubfields, [...orderedSubfields, ...filtered]);
