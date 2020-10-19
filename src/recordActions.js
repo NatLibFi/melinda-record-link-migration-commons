@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 import {format} from 'util';
-import {sortSubfields} from './utils';
+import {sortSubfields, findFieldIndex} from './utils';
 
 export default function () {
   const logger = createLogger(); // eslint-disable-line no-unused-vars
@@ -114,40 +114,43 @@ export default function () {
     // TEST {from, to, order} = change;
     const {from, to} = change;
     const changeValues = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
-    logger.log('info', `Change value ${changeValues}`);
+    logger.log('verbose', `Change value ${changeValues}`);
 
     changeValues.forEach(changeValue => {
       const formatedChangeValue = toFormat(to, changeValue);
-      logger.log('info', `Formated change value ${JSON.stringify(formatedChangeValue)}`);
+      logger.log('verbose', `Formated change value ${JSON.stringify(formatedChangeValue)}`);
 
       const filterSubfields = subfieldsFromRecord(sourceRecord, to.where).flat();
-      logger.log('info', `Filter subfields ${JSON.stringify(filterSubfields)}`);
+      logger.log('verbose', `Filter subfields ${JSON.stringify(filterSubfields)}`);
 
       const fields = record.get(new RegExp(`^${to.where.to.tag}$`, 'u'));
-      const filteredFields = fields.filter(field => filterSubfields.every(sfQuery => field.subfields.some(sf => {
-        if ([sf.code, sf.value, sfQuery.code, sfQuery.value].includes(undefined)) {
+      const filteredFieldIndexes = fields.filter(field => {
+        if (JSON.stringify(field.subfields).indexOf(JSON.stringify(formatedChangeValue)) > -1) {
+          logger.log('verbose', 'Change value allready exists');
           return false;
         }
 
-        return sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value);
-      })));
-      logger.log('info', `Filtered fields ${JSON.stringify(filteredFields)}`);
+        return filterSubfields.every(sfQuery => field.subfields.some(sf => {
+          if ([sf.code, sf.value, sfQuery.code, sfQuery.value].includes(undefined)) {
+            return false;
+          }
 
-      filteredFields.forEach(field => {
-        if (JSON.stringify(field.subfields).indexOf(JSON.stringify(formatedChangeValue)) > -1) {
-          return;
-        }
+          return sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value);
+        }));
+      }).filter(value => value);
+      logger.log('verbose', `Filtered field index ${JSON.stringify(filteredFieldIndexes)}`);
 
+      filteredFieldIndexes.forEach(field => {
+        const index = findFieldIndex(field, record);
         const orderedSubfields = sortSubfields(change.order, [...field.subfields, formatedChangeValue]);
+        logger.log('verbose', `Ordered subfields: ${JSON.stringify(orderedSubfields)}`);
 
-        record.insertField({
+        record.fields.splice(index, 1, { // eslint-disable-line functional/immutable-data
           tag: field.tag,
           ind1: field.ind1,
           ind2: field.ind2,
           subfields: orderedSubfields
         });
-
-        record.removeField(field);
       });
     });
 
@@ -169,29 +172,23 @@ export default function () {
       const filterSubfields = field.subfields.filter(sub => duplicateFilterCodes.includes(sub.code));
 
       const fields = record.get(new RegExp(`^${field.tag}$`, 'u'));
-      const dublicates = fields.map(field, index => {
-        const isSame = filterSubfields.every(sfQuery => field.subfields.some(sf => {
-          if ([sf.code, sf.value, sfQuery.code, sfQuery.value].includes(undefined)) {
-            return false;
-          }
-
-          return sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value);
-        }));
-
-        if (isSame) {
-          return index;
+      const dublicates = fields.map(field => filterSubfields.every(sfQuery => field.subfields.some(sf => {
+        if ([sf.code, sf.value, sfQuery.code, sfQuery.value].includes(undefined)) {
+          return false;
         }
 
-        return false;
-      }).filter(value => value);
+        return sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value);
+      })));
 
       if (dublicates.length > 0) {
         logger.log('debug', `Replacing dublicate index: ${JSON.stringify(dublicates)}`);
-        dublicates.forEach(dfieldIndex => {
-          record.fields.splice(dfieldIndex, 1, field); // eslint-disable-line functional/immutable-data
+        dublicates.forEach(dField => {
+          const dFieldIndex = findFieldIndex(dField, record);
+          record.fields.splice(dFieldIndex, 1, field); // eslint-disable-line functional/immutable-data
         });
         return;
       }
+
       logger.log('debug', `Inserting new field: ${JSON.stringify(field)}`);
       record.insertField(field);
     });

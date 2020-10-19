@@ -8,6 +8,11 @@ export function sortSubfields(order, subfields, orderedSubfields = []) {
     return [...orderedSubfields, ...subfields];
   }
 
+  logger.log('silly', '************************************************************');
+  logger.log('silly', `Subfield sort filter: ${JSON.stringify(filter)}`);
+  logger.log('silly', `Subfields: ${JSON.stringify(subfields)}`);
+  logger.log('silly', `Ordered subfields: ${JSON.stringify(orderedSubfields)}`);
+
   const filtered = subfields.filter(sub => {
     if (typeof filter === 'string') {
       return sub.code === filter;
@@ -15,6 +20,8 @@ export function sortSubfields(order, subfields, orderedSubfields = []) {
 
     return sub.code === filter.code && new RegExp(filter.value, 'u').test(sub.value);
   });
+
+  logger.log('silly', `Filtered subfields: ${JSON.stringify(filtered)}`);
 
   const restSubfields = subfields.filter(sub => {
     if (typeof filter === 'string') {
@@ -28,6 +35,10 @@ export function sortSubfields(order, subfields, orderedSubfields = []) {
   }
 
   return sortSubfields(rest, restSubfields, orderedSubfields);
+}
+
+export function findFieldIndex(field, record) {
+  return record.fields.indexOf(field);
 }
 
 export function logError(error) {
