@@ -167,11 +167,29 @@ export default function () {
 
     linkDataFields.forEach(field => {
       const filterSubfields = field.subfields.filter(sub => duplicateFilterCodes.includes(sub.code));
-      const dublicate = record.getFields(field.tag, filterSubfields);
-      if (dublicate.length > 0) {
-        logger.log('debug', `Replacing dublicate: ${JSON.stringify(dublicate)}`);
-        dublicate.forEach(field => record.removeField(field));
-        record.insertField(field);
+
+      const fields = record.get(new RegExp(`^${field.tag}$`, 'u'));
+      const dublicates = fields.map(field, index => {
+        const isSame = filterSubfields.every(sfQuery => field.subfields.some(sf => {
+          if ([sf.code, sf.value, sfQuery.code, sfQuery.value].includes(undefined)) {
+            return false;
+          }
+
+          return sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value);
+        }));
+
+        if (isSame) {
+          return index;
+        }
+
+        return false;
+      }).filter(value => value);
+
+      if (dublicates.length > 0) {
+        logger.log('debug', `Replacing dublicate index: ${JSON.stringify(dublicates)}`);
+        dublicates.forEach(dfieldIndex => {
+          record.fields.splice(dfieldIndex, 1, field); // eslint-disable-line functional/immutable-data
+        });
         return;
       }
       logger.log('debug', `Inserting new field: ${JSON.stringify(field)}`);
