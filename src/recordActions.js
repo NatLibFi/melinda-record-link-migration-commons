@@ -30,7 +30,13 @@ export default function () {
     logger.log('debug', `Values from source: ${JSON.stringify(subfieldsFromSource)}`);
     const filteredRecords = records.filter(record => {
       const fields = record.get(new RegExp(`^${to.tag}$`, 'u'));
-      const validFields = fields.filter(field => subfieldsFromSource.every(sfQuery => field.subfields.some(sf => sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value))));
+      const validFields = fields.filter(field => subfieldsFromSource.every(sfQuery => field.subfields.some(sf => {
+        if ([sf.code, sf.value, sfQuery.code, sfQuery.value].includes(undefined)) {
+          return false;
+        }
+
+        return sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value);
+      })));
       return validFields.length > 0;
     });
 
@@ -43,9 +49,6 @@ export default function () {
     logger.log('debug', JSON.stringify(validIds));
 
     return filteredRecords;
-
-    // Normalize values to loosen the mathcing. Example: $a Kekkonen, Urho, or $a Kekkonen, Urho. matches to $a Kekkonen, Urho
-
   }
 
   function filterExistingFields(linkDataFields, record) {
@@ -121,7 +124,13 @@ export default function () {
       logger.log('info', `Filter subfields ${JSON.stringify(filterSubfields)}`);
 
       const fields = record.get(new RegExp(`^${to.where.to.tag}$`, 'u'));
-      const filteredFields = fields.filter(field => filterSubfields.every(sfQuery => field.subfields.some(sf => sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value))));
+      const filteredFields = fields.filter(field => filterSubfields.every(sfQuery => field.subfields.some(sf => {
+        if ([sf.code, sf.value, sfQuery.code, sfQuery.value].includes(undefined)) {
+          return false;
+        }
+
+        return sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value);
+      })));
       logger.log('info', `Filtered fields ${JSON.stringify(filteredFields)}`);
 
       filteredFields.forEach(field => {
@@ -197,6 +206,7 @@ export default function () {
     updatedFields.forEach(field => record.insertField(field));
   }
 
+  // Normalize values to loosen the mathcing. Example: $a Kekkonen, Urho, or $a Kekkonen, Urho. matches to $a Kekkonen, Urho
   function normalize(value) {
     return value
       .replace(/[^\w\s\p{Alphabetic}]/gu, '')
