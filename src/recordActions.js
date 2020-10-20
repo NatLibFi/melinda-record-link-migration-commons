@@ -44,7 +44,7 @@ export default function () {
         return isMatch;
       })));
 
-      logger.log('debug', `Matching fields: ${JSON.stringify(validFields)}`);
+      logger.log('silly', `Matching fields: ${JSON.stringify(validFields)}`);
       return validFields.length > 0;
     });
 
