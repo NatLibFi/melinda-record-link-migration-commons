@@ -1,0 +1,21 @@
+{
+    "description": "Should filter records from list where field 100 from source match to 100 in record",
+    "testedFunction": "filterRecordsBy",
+    "config": {
+        "collect": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "q"
+        ],
+        "from": {
+            "tag": "100",
+            "value": "collect"
+        },
+        "to": {
+            "tag": "100",
+            "value": "collect"
+        }
+    }
+}

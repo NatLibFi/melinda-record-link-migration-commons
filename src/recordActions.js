@@ -6,7 +6,7 @@ import {sortSubfields, findFieldIndex} from './utils';
 export default function () {
   const logger = createLogger(); // eslint-disable-line no-unused-vars
 
-  return {filterRecordsBy, filterExistingFields, valuesFromRecord, subfieldsFromRecord, replaceValueInField, addOrReplaceDataFields, removeSubfields};
+  return {addOrReplaceDataFields, filterRecordsBy, filterExistingFields, valuesFromRecord, subfieldsFromRecord, replaceValueInField, removeSubfields};
 
   // Filter & sort
 
@@ -31,12 +31,20 @@ export default function () {
     const filteredRecords = records.filter(record => {
       const fields = record.get(new RegExp(`^${to.tag}$`, 'u'));
       const validFields = fields.filter(field => subfieldsFromSource.every(sfQuery => field.subfields.some(sf => {
+        logger.log('silly', `sfq: ${JSON.stringify(sfQuery)}`);
+        logger.log('silly', `sf: ${JSON.stringify(sf)}`);
+
         if ([sf.code, sf.value, sfQuery.code, sfQuery.value].includes(undefined)) {
+          logger.log('silly', 'Undefined value found!');
           return false;
         }
 
-        return sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value);
+        const isMatch = sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value);
+        logger.log('silly', `Is match: ${isMatch}`);
+        return isMatch;
       })));
+
+      logger.log('debug', `Matching fields: ${JSON.stringify(validFields)}`);
       return validFields.length > 0;
     });
 
@@ -46,7 +54,7 @@ export default function () {
       return [f001, f003];
     });
 
-    logger.log('debug', JSON.stringify(validIds));
+    logger.log('debug', `Filtered records: ${JSON.stringify(validIds)}`);
 
     return filteredRecords;
   }
