@@ -27,7 +27,7 @@
 		"lint": "eslint ./src",
 		"lint:dev": "eslint ./src --fix",
 		"check-deps": "npm-check;exit 0",
-		"test:base": "cross-env NODE_ENV=test mocha --require @babel/register",
+		"test:base": "cross-env NODE_ENV=test LOG_LEVEL=debug mocha --require @babel/register",
 		"test": "npm run lint && npm run test:base -- src/*.spec.js",
 		"dev": "NODE_ENV=development cross-env DEBUG=1 nodemon",
 		"build": "babel src --source-maps --copy-files --delete-dir-on-start --out-dir=dist --minified"

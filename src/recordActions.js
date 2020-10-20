@@ -167,24 +167,19 @@ export default function () {
 
   function addOrReplaceDataFields(record, linkDataFields, {duplicateFilterCodes = ['XXX']}) {
     logger.log('verbose', 'Replacing data fields to record');
+    logger.log('debug', `Duplicate filter codes: ${JSON.stringify(duplicateFilterCodes)}`);
 
     linkDataFields.forEach(field => {
       const filterSubfields = field.subfields.filter(sub => duplicateFilterCodes.includes(sub.code));
+      logger.log('debug', `Found from field: ${JSON.stringify(filterSubfields)}`);
 
-      const fields = record.get(new RegExp(`^${field.tag}$`, 'u'));
-      const dublicates = fields.map(field => filterSubfields.every(sfQuery => field.subfields.some(sf => {
-        if ([sf.code, sf.value, sfQuery.code, sfQuery.value].includes(undefined)) {
-          return false;
-        }
-
-        return sf.code === sfQuery.code && normalize(sf.value) === normalize(sfQuery.value);
-      })));
+      const dublicates = record.getFields(field.tag, filterSubfields);
 
       if (dublicates.length > 0) {
         logger.log('debug', `Replacing dublicate index: ${JSON.stringify(dublicates)}`);
         dublicates.forEach(dField => {
-          const dFieldIndex = findFieldIndex(field, record);
-          record.fields.splice(dFieldIndex, 1, dField); // eslint-disable-line functional/immutable-data
+          const dFieldIndex = findFieldIndex(dField, record);
+          record.fields.splice(dFieldIndex, 1, field); // eslint-disable-line functional/immutable-data
         });
         return;
       }

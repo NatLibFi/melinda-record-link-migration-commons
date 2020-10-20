@@ -1,5 +1,5 @@
 {
     "description": "Should remove faulty subfield from field 700 in record",
     "testedFunction": "removeSubfields",
-    "change": {"tag": "700", "code": "0", "value": "^\\d+$"}
+    "config": {"tag": "700", "code": "0", "value": "^\\d+$"}
 }

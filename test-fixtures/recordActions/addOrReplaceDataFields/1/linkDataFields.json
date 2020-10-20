@@ -1,0 +1,40 @@
+[
+    {
+        "tag": "650",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+            {
+                "code": "a",
+                "value": "nuottijulkaisut"
+            },
+            {
+                "code": "2",
+                "value": "yso/fin"
+            },
+            {
+                "code": "0",
+                "value": "http://www.yso.fi/onto/yso/p2966"
+            }
+        ]
+    },
+    {
+        "tag": "650",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+            {
+                "code": "a",
+                "value": "musikalier"
+            },
+            {
+                "code": "2",
+                "value": "yso/sv"
+            },
+            {
+                "code": "0",
+                "value": "http://www.yso.fi/onto/yso/p2966"
+            }
+        ]
+    }
+]
