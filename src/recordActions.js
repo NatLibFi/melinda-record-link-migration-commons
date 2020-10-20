@@ -183,8 +183,8 @@ export default function () {
       if (dublicates.length > 0) {
         logger.log('debug', `Replacing dublicate index: ${JSON.stringify(dublicates)}`);
         dublicates.forEach(dField => {
-          const dFieldIndex = findFieldIndex(dField, record);
-          record.fields.splice(dFieldIndex, 1, field); // eslint-disable-line functional/immutable-data
+          const dFieldIndex = findFieldIndex(field, record);
+          record.fields.splice(dFieldIndex, 1, dField); // eslint-disable-line functional/immutable-data
         });
         return;
       }
@@ -197,28 +197,27 @@ export default function () {
   }
 
   function removeSubfields(record, config) {
-    const tagRegexp = new RegExp(`${config.tag}`, 'u');
+    logger.log('verbose', 'Removing subfields from record');
     const valueRegexp = new RegExp(`${config.value}`, 'u');
-    const fields = record.getFields(tagRegexp);
-    const updatedFields = fields.map(field => {
-      logger.log('debug', JSON.stringify(field));
+    const fields = record.getFields(config.tag);
+    fields.forEach(field => {
+      logger.log('debug', `Current field: ${JSON.stringify(field)}`);
       const {tag, ind1, ind2, subfields} = field;
+
       const updatedSubs = subfields.filter(sub => {
         if (sub.code === config.code && valueRegexp.test(sub.value)) {
-          logger.log('debug', 'filtering out subfield');
+          logger.log('debug', `Filtering out subfield: ${JSON.stringify(sub)}`);
           return false;
         }
 
         return true;
       });
 
-      return {
+      const index = findFieldIndex(field, record);
+      record.fields.splice(index, 1, { // eslint-disable-line functional/immutable-data
         tag, ind1, ind2, subfields: updatedSubs
-      };
+      });
     });
-
-    fields.forEach(field => record.removeField(field));
-    updatedFields.forEach(field => record.insertField(field));
   }
 
   // Normalize values to loosen the mathcing. Example: $a Kekkonen, Urho, or $a Kekkonen, Urho. matches to $a Kekkonen, Urho

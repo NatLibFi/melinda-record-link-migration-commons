@@ -11,19 +11,28 @@ generateTests({
   useMetadataFile: true
 });
 
-async function callback({getFixture, change}) {
-  const linkedRecord = new MarcRecord(getFixture({components: ['linkedRecord'], reader: READERS.JSON}), {subfieldValues: false});
-  const sourceRecord = new MarcRecord(getFixture({components: ['sourceRecord'], reader: READERS.JSON}), {subfieldValues: false});
-  const resultRecord = getFixture({components: ['resultRecord'], reader: READERS.JSON});
-
-  // console.log(linkedRecord); // eslint-disable-line no-console
+async function callback({getFixture, change, testedFunction}) {
+  const resultRecord = new MarcRecord(getFixture({components: ['resultRecord.json'], reader: READERS.JSON}));
+  const sourceRecord = new MarcRecord(getFixture({components: ['sourceRecord.json'], reader: READERS.JSON}));
+  const testRecord = new MarcRecord(getFixture({components: ['testRecord.json'], reader: READERS.JSON}));
+  // console.log(resultRecord); // eslint-disable-line no-console
   // console.log(sourceRecord); // eslint-disable-line no-console
+  // console.log(testRecord); // eslint-disable-line no-console
   // console.log(change); // eslint-disable-line no-console
 
-  const {replaceValueInField} = recordActions();
+  if (testedFunction === 'removeSubfields') {
+    const {removeSubfields} = recordActions();
+    removeSubfields(testRecord, change);
+    // console.log(JSON.stringify(testRecord, undefined, 2)); // eslint-disable-line no-console
+    expect(testRecord).to.eqls(resultRecord);
+    return;
+  }
 
-  await replaceValueInField(sourceRecord, linkedRecord, change);
-
-  // console.log(JSON.stringify(linkedRecord)); // eslint-disable-line no-console
-  expect(linkedRecord).to.eqls(resultRecord);
+  if (testedFunction === 'replaceValueInField') {
+    const {replaceValueInField} = recordActions();
+    await replaceValueInField(sourceRecord, testRecord, change);
+    // console.log(JSON.stringify(linkedRecord, undefined, 2)); // eslint-disable-line no-console
+    expect(testRecord).to.eqls(resultRecord);
+    return;
+  }
 }
