@@ -192,8 +192,6 @@ export default function () {
       logger.log('debug', `Inserting new field: ${JSON.stringify(field)}`);
       record.insertField(field);
     });
-
-    return record;
   }
 
   function removeSubfields(record, config) {
