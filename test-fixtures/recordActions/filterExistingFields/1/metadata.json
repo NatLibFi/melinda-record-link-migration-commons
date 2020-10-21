@@ -1,0 +1,4 @@
+{
+    "description": "Filters allready existing fields from linked data",
+    "testedFunction": "filterExistingFields"
+}

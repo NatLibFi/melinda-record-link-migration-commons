@@ -6,9 +6,45 @@ import {sortSubfields, findFieldIndex} from './utils';
 export default function () {
   const logger = createLogger(); // eslint-disable-line no-unused-vars
 
-  return {addOrReplaceDataFields, filterRecordsBy, filterExistingFields, valuesFromRecord, subfieldsFromRecord, replaceValueInField, removeSubfields};
+  return {addOrReplaceDataFields, filterExistingFields, filterRecordsBy, removeSubfields, replaceValueInField, subfieldsFromRecord, valuesFromRecord};
+
+  function addOrReplaceDataFields(record, linkDataFields, {duplicateFilterCodes = ['XXX']}) {
+    logger.log('verbose', 'Replacing data fields to record');
+    logger.log('debug', `Duplicate filter codes: ${JSON.stringify(duplicateFilterCodes)}`);
+
+    linkDataFields.forEach(field => {
+      const filterSubfields = field.subfields.filter(sub => duplicateFilterCodes.includes(sub.code));
+      logger.log('debug', `Found from field: ${JSON.stringify(filterSubfields)}`);
+
+      const dublicates = record.getFields(field.tag, filterSubfields);
+
+      if (dublicates.length > 0) {
+        logger.log('debug', `Replacing dublicate index: ${JSON.stringify(dublicates)}`);
+        dublicates.forEach(dField => {
+          const dFieldIndex = findFieldIndex(dField, record);
+          record.fields.splice(dFieldIndex, 1, field); // eslint-disable-line functional/immutable-data
+        });
+        return;
+      }
+
+      logger.log('debug', `Inserting new field: ${JSON.stringify(field)}`);
+      record.insertField(field);
+    });
+  }
 
   // Filter & sort
+
+  function filterExistingFields(linkDataFields, record) {
+    return linkDataFields.filter(field => {
+      logger.log('silly', `Removing duplicate ${field.tag}, ${JSON.stringify(field.subfields)}`);
+
+      if (record.containsFieldWithValue(field.tag, field.subfields)) {
+        return false;
+      }
+
+      return true;
+    });
+  }
 
   function filterRecordsBy(sourceRecord, records, {collect, from, to}) {
     if (from === undefined || to === undefined) {
@@ -59,64 +95,31 @@ export default function () {
     return filteredRecords;
   }
 
-  function filterExistingFields(linkDataFields, record) {
-    return linkDataFields.filter(field => {
-      logger.log('silly', `Removing duplicate ${field.tag}, ${JSON.stringify(field.subfields)}`);
-
-      if (record.containsFieldWithValue(field.tag, field.subfields)) {
-        return false;
-      }
-
-      return true;
-    });
-  }
-
-  // Get
-
-  function valuesFromRecord(record, {from}) {
-    const fields = record.get(new RegExp(`^${from.tag}$`, 'u'));
-    if (fields.length === 0) {
-      return false;
-    }
-
-    return fields.map(field => field.value);
-  }
-
-  function subfieldsFromRecord(record, {from, collect = []}) {
-    const fields = record.get(new RegExp(`^${from.tag}$`, 'u'));
-    if (fields.length === 0) {
-      return false;
-    }
-
-    const subfields = fields.map(field => {
-      if (field.subfields === undefined) {
-        return null;
-      }
-
-      if (collect.length === 0) {
-        return field.subfields;
-      }
-
-      return field.subfields.filter(sub => collect.includes(sub.code));
-    });
-
-    return filterPump(subfields);
-
-    function filterPump(subfields, uniques = []) {
-      const [sub, ...rest] = subfields;
-      if (sub === undefined) {
-        return uniques;
-      }
-      const matches = uniques.filter(uniq => uniq.code === sub.code && uniq.value === sub.value);
-      if (matches.length > 0) {
-        return filterPump(rest, uniques);
-      }
-
-      return filterPump(rest, [...uniques, sub]);
-    }
-  }
-
   // Modify
+
+  function removeSubfields(record, config) {
+    logger.log('verbose', 'Removing subfields from record');
+    const valueRegexp = new RegExp(`${config.value}`, 'u');
+    const fields = record.getFields(config.tag);
+    fields.forEach(field => {
+      logger.log('debug', `Current field: ${JSON.stringify(field)}`);
+      const {tag, ind1, ind2, subfields} = field;
+
+      const updatedSubs = subfields.filter(sub => {
+        if (sub.code === config.code && valueRegexp.test(sub.value)) {
+          logger.log('debug', `Filtering out subfield: ${JSON.stringify(sub)}`);
+          return false;
+        }
+
+        return true;
+      });
+
+      const index = findFieldIndex(field, record);
+      record.fields.splice(index, 1, { // eslint-disable-line functional/immutable-data
+        tag, ind1, ind2, subfields: updatedSubs
+      });
+    });
+  }
 
   function replaceValueInField(sourceRecord, record, change) {
     // TEST {from, to, order} = change;
@@ -173,52 +176,49 @@ export default function () {
     }
   }
 
-  function addOrReplaceDataFields(record, linkDataFields, {duplicateFilterCodes = ['XXX']}) {
-    logger.log('verbose', 'Replacing data fields to record');
-    logger.log('debug', `Duplicate filter codes: ${JSON.stringify(duplicateFilterCodes)}`);
+  // Get
 
-    linkDataFields.forEach(field => {
-      const filterSubfields = field.subfields.filter(sub => duplicateFilterCodes.includes(sub.code));
-      logger.log('debug', `Found from field: ${JSON.stringify(filterSubfields)}`);
+  function subfieldsFromRecord(record, {from, collect = []}) {
+    const fields = record.get(new RegExp(`^${from.tag}$`, 'u'));
+    if (fields.length === 0) {
+      return false;
+    }
 
-      const dublicates = record.getFields(field.tag, filterSubfields);
-
-      if (dublicates.length > 0) {
-        logger.log('debug', `Replacing dublicate index: ${JSON.stringify(dublicates)}`);
-        dublicates.forEach(dField => {
-          const dFieldIndex = findFieldIndex(dField, record);
-          record.fields.splice(dFieldIndex, 1, field); // eslint-disable-line functional/immutable-data
-        });
-        return;
+    const subfields = fields.map(field => {
+      if (field.subfields === undefined) {
+        return null;
       }
 
-      logger.log('debug', `Inserting new field: ${JSON.stringify(field)}`);
-      record.insertField(field);
+      if (collect.length === 0) {
+        return field.subfields;
+      }
+
+      return field.subfields.filter(sub => collect.includes(sub.code));
     });
+
+    return filterPump(subfields);
+
+    function filterPump(subfields, uniques = []) {
+      const [sub, ...rest] = subfields;
+      if (sub === undefined) {
+        return uniques;
+      }
+      const matches = uniques.filter(uniq => uniq.code === sub.code && uniq.value === sub.value);
+      if (matches.length > 0) {
+        return filterPump(rest, uniques);
+      }
+
+      return filterPump(rest, [...uniques, sub]);
+    }
   }
 
-  function removeSubfields(record, config) {
-    logger.log('verbose', 'Removing subfields from record');
-    const valueRegexp = new RegExp(`${config.value}`, 'u');
-    const fields = record.getFields(config.tag);
-    fields.forEach(field => {
-      logger.log('debug', `Current field: ${JSON.stringify(field)}`);
-      const {tag, ind1, ind2, subfields} = field;
+  function valuesFromRecord(record, {from}) {
+    const fields = record.get(new RegExp(`^${from.tag}$`, 'u'));
+    if (fields.length === 0) {
+      return false;
+    }
 
-      const updatedSubs = subfields.filter(sub => {
-        if (sub.code === config.code && valueRegexp.test(sub.value)) {
-          logger.log('debug', `Filtering out subfield: ${JSON.stringify(sub)}`);
-          return false;
-        }
-
-        return true;
-      });
-
-      const index = findFieldIndex(field, record);
-      record.fields.splice(index, 1, { // eslint-disable-line functional/immutable-data
-        tag, ind1, ind2, subfields: updatedSubs
-      });
-    });
+    return fields.map(field => field.value);
   }
 
   // Normalize values to loosen the mathcing. Example: $a Kekkonen, Urho, or $a Kekkonen, Urho. matches to $a Kekkonen, Urho
