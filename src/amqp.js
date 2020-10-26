@@ -41,7 +41,7 @@ export default async function (AMQP_URL) {
 
   async function checkQueue(queue, style = 'basic', purge = false) {
     try {
-      const channelInfo = await channel.assertQueue(queue, {durable: true});
+      const channelInfo = await channel.assertQueue(queue, {durable: true, autoDelete: true});
       logger.log('debug', `Queue ${queue} has ${channelInfo.messageCount} records`);
 
       await purgeQueue(purge);
@@ -78,7 +78,7 @@ export default async function (AMQP_URL) {
   async function consume(queue) {
     // Debug: logger.log('debug', `Prepared to consume from queue: ${queue}`);
     try {
-      await channel.assertQueue(queue, {durable: true});
+      await channel.assertQueue(queue, {durable: true, autoDelete: true});
       const queMessages = await getData(queue);
       return queMessages;
     } catch (error) {
@@ -88,7 +88,7 @@ export default async function (AMQP_URL) {
 
   async function consumeOne(queue) {
     try {
-      await channel.assertQueue(queue, {durable: true});
+      await channel.assertQueue(queue, {durable: true, autoDelete: true});
       // Returns false if 0 items in queue
       return await channel.get(queue);
     } catch (error) {
