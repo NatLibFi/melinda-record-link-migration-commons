@@ -38,12 +38,12 @@ const parserList = [regExpLeader, regExpTag, regExpValue, regExpValuePattern, re
 function parseValidatorPump(validators, parsed = []) {
   const [validator, ...rest] = validators;
   if (validator === undefined) {
-    logger.log('info', `Parsed validators: ${JSON.stringify(parsed)}`);
+    logger.log('debug', `Parsed validators: ${JSON.stringify(parsed)}`);
     return parsed;
   }
 
   if (typeof validator === 'string') {
-    logger.log('info', `Parsed validator: ${JSON.stringify(validator)}`);
+    logger.log('debug', `Parsed validator: ${JSON.stringify(validator)}`);
     return parseValidatorPump(rest, [...parsed, new RegExp(`${validator}`, 'u')]);
   }
 
@@ -54,7 +54,7 @@ function parseValidatorPump(validators, parsed = []) {
 function parseRecordValidators(object, parsers = parserList) {
   const [parser, ...rest] = parsers;
   if (parser === undefined) {
-    logger.log('info', `Parsed validator: ${JSON.stringify(object)}`);
+    logger.log('debug', `Parsed validator: ${JSON.stringify(object)}`);
     return object;
   }
 

@@ -134,7 +134,7 @@ export default async function (AMQP_URL) {
       // Logger.log('debug', `Record correlationId ${correlationId}`);
       // Logger.log('debug', `Record data ${data}`);
 
-      await channel.assertQueue(queue, {durable: true});
+      await channel.assertQueue(queue, {durable: true, autoDelete: true});
 
       channel.sendToQueue(
         queue,

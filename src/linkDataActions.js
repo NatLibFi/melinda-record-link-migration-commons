@@ -11,7 +11,7 @@ export default function () {
   function convertLinkDataToControlFields(linkDataArray, {add}) {
     logger.log('verbose', 'Creating control fields from linkDataArray');
     // Add:{"tag": 001, "value": "%s"}
-    // LinkDataArray:[[{"value":"012954824"}]],
+    // LinkDataArray:[[{"tag": "001","value":"012954824"}]],
     return linkDataArray.map(linkData => {
       const [value] = linkData;
       return {tag: add.tag, value: format(add.value, value)};
