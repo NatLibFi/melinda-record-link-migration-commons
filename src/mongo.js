@@ -3,6 +3,7 @@ import {Error as ApiError} from '@natlibfi/melinda-commons';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 import moment from 'moment';
 import {logError} from './utils';
+import {EPIC_JOB_STATES} from './constants';
 
 /* JobItem:
 {
@@ -75,7 +76,7 @@ export default async function (mongoUrl) {
   function getOne(jobState) {
     try {
       logger.log('debug', `Checking DB for ${jobState}`);
-      return db.collection('job-items').findOne({jobState});
+      return db.collection('job-items').findOne({jobState}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
       return false;
@@ -85,7 +86,7 @@ export default async function (mongoUrl) {
   function getById(id) {
     try {
       logger.log('debug', `Checking DB for id: ${id}`);
-      return db.collection('job-items').findOne({jobId: id});
+      return db.collection('job-items').findOne({jobId: id}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
       return false;
@@ -130,6 +131,98 @@ export default async function (mongoUrl) {
     }, {
       $push: {
         blobIds: {$each: blobIds}
+      },
+      $set: {
+        modificationTime: moment().toDate()
+      }
+    });
+  }
+}
+
+export async function createEpicMongoOperator(mongoUrl) {
+  const logger = createLogger();
+  // Connect to mongo (MONGO)
+  const client = await MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
+  const db = client.db('linkker');
+
+  return {createEpic, getByState, getByEpicConfigFile, setState, updateEpic, pushJobIds};
+
+  function createEpic({epicConfigFile}) {
+    // Create JobItem
+    const newJobItem = {
+      epicConfigFile,
+      epicState: EPIC_JOB_STATES.PENDING,
+      sourceHarvesting: EPIC_JOB_STATES.PENDING,
+      resumption: '',
+      jobs: [],
+      creationTime: moment().toDate(),
+      modificationTime: moment().toDate()
+    };
+    try {
+      db.collection('epic-items').insertOne(newJobItem);
+      logger.log('info', 'New jobItem has been made!');
+      return db.collection('epic-items').findOne({epicConfigFile}, {projection: {_id: 0}});
+    } catch (error) {
+      logError(error);
+      throw new ApiError(500, 'Error while creating job item');
+    }
+  }
+
+  function getByState({epicState}) {
+    try {
+      logger.log('debug', `Checking DB for state: ${epicState}`);
+      return db.collection('epic-items').findOne({epicState}, {projection: {_id: 0}});
+    } catch (error) {
+      logError(error);
+      return false;
+    }
+  }
+
+  function getByEpicConfigFile({epicConfigFile}) {
+    try {
+      logger.log('debug', `Checking DB for id: ${epicConfigFile}`);
+      return db.collection('epic-items').findOne({epicConfigFile}, {projection: {_id: 0}});
+    } catch (error) {
+      logError(error);
+      return false;
+    }
+  }
+
+  async function setState({epicConfigFile, epicState}) {
+    logger.log('info', `Setting jobItem state: ${epicConfigFile}, ${epicState}`);
+    const result = await db.collection('epic-items').findOneAndUpdate({
+      epicConfigFile
+    }, {
+      $set: {
+        epicState,
+        modificationTime: moment().toDate()
+      }
+    }, {projection: {_id: 0}, returnNewDocument: true});
+    return result.value;
+  }
+
+  async function updateEpic({epicConfigFile, resumption}) {
+    logger.log('info', `Updating job config: ${epicConfigFile}`);
+    logger.log('debug', JSON.stringify(resumption));
+    const result = await db.collection('epic-items').findOneAndUpdate({
+      epicConfigFile
+    }, {
+      $set: {
+        resumption,
+        modificationTime: moment().toDate()
+      }
+    }, {projection: {_id: 0}, returnNewDocument: true});
+    return result.value;
+  }
+
+  async function pushJobIds({epicConfigFile, list}) {
+    logger.log('info', '********************************************');
+    logger.log('debug', `Pushing to epic item ${epicConfigFile} job ids: ${list}`);
+    await db.collection('epic-items').updateOne({
+      epicConfigFile
+    }, {
+      $push: {
+        jobs: {$each: list}
       },
       $set: {
         modificationTime: moment().toDate()
