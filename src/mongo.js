@@ -211,19 +211,37 @@ export async function createEpicMongoOperator(mongoUrl) {
     return result.value;
   }
 
-  async function pushJobsAndUpdateSourceHarvesting({epicConfigFile, sourceHarvesting, jobs}) {
+  async function pushJobsAndUpdateSourceHarvesting({epicConfigFile, resumptionToken = null, offset = null, jobs}) {
     logger.log('info', '********************************************');
     logger.log('debug', `Pushing to epic item ${epicConfigFile} job ids: ${jobs}`);
-    await db.collection('epic-items').updateOne({
-      epicConfigFile
-    }, {
-      $push: {
-        jobs: {$each: jobs}
-      },
-      $set: {
-        sourceHarvesting,
-        modificationTime: moment().toDate()
-      }
-    });
+    if (resumptionToken !== null && offset === null) {
+      return db.collection('epic-items').updateOne({
+        epicConfigFile
+      }, {
+        $push: {
+          jobs: {$each: jobs}
+        },
+        $set: {
+          "sourceHarvesting.resumptionToken": resumptionToken,
+          modificationTime: moment().toDate()
+        }
+      });
+    }
+
+    if (offset !== null && resumptionToken === null) {
+      return db.collection('epic-items').updateOne({
+        epicConfigFile
+      }, {
+        $push: {
+          jobs: {$each: jobs}
+        },
+        $set: {
+          "sourceHarvesting.offset": offset,
+          modificationTime: moment().toDate()
+        }
+      });
+    }
+
+    throw new ApiError(400, 'Invalid parametters');
   }
 }
