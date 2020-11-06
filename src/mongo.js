@@ -211,14 +211,14 @@ export async function createEpicMongoOperator(mongoUrl) {
     return result.value;
   }
 
-  async function pushJobsAndUpdateSourceHarvesting({epicConfigFile, sourceHarvesting, list}) {
+  async function pushJobsAndUpdateSourceHarvesting({epicConfigFile, sourceHarvesting, jobs}) {
     logger.log('info', '********************************************');
-    logger.log('debug', `Pushing to epic item ${epicConfigFile} job ids: ${list}`);
+    logger.log('debug', `Pushing to epic item ${epicConfigFile} job ids: ${jobs}`);
     await db.collection('epic-items').updateOne({
       epicConfigFile
     }, {
       $push: {
-        jobs: {$each: list}
+        jobs: {$each: jobs}
       },
       $set: {
         sourceHarvesting,
