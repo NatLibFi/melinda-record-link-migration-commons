@@ -145,7 +145,7 @@ export async function createEpicMongoOperator(mongoUrl) {
   const client = await MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
   const db = client.db('linkker');
 
-  return {createEpic, getByState, getByEpicConfigFile, setState, pushJobsAndUpdateSourceHarvesting};
+  return {createEpic, removeEpic, getByState, getByEpicConfigFile, setState, pushJobsAndUpdateSourceHarvesting};
 
   function createEpic({epicConfigFile, sourceHarvesting, linkDataHarvesting}) {
     // Create JobItem
@@ -165,6 +165,16 @@ export async function createEpicMongoOperator(mongoUrl) {
     } catch (error) {
       logError(error);
       throw new ApiError(500, 'Error while creating job item');
+    }
+  }
+
+  function removeEpic({epicConfigFile}) {
+    try {
+      logger.log('debug', `Removing epic from DB: ${epicConfigFile}`);
+      return db.collection('epic-items').deleteOne({epicConfigFile});
+    } catch (error) {
+      logError(error);
+      return false;
     }
   }
 
