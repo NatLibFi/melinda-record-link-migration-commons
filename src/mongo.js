@@ -145,15 +145,15 @@ export async function createEpicMongoOperator(mongoUrl) {
   const client = await MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
   const db = client.db('linkker');
 
-  return {createEpic, getByState, getByEpicConfigFile, setState, updateEpic, pushJobIds};
+  return {createEpic, getByState, getByEpicConfigFile, setState, pushJobsAndUpdateSourceHarvesting};
 
-  function createEpic({epicConfigFile}) {
+  function createEpic({epicConfigFile, sourceHarvesting, linkDataHarvesting}) {
     // Create JobItem
     const newJobItem = {
       epicConfigFile,
       epicState: EPIC_JOB_STATES.PENDING,
-      sourceHarvesting: EPIC_JOB_STATES.PENDING,
-      resumption: '',
+      sourceHarvesting,
+      linkDataHarvesting,
       jobs: [],
       creationTime: moment().toDate(),
       modificationTime: moment().toDate()
@@ -201,21 +201,7 @@ export async function createEpicMongoOperator(mongoUrl) {
     return result.value;
   }
 
-  async function updateEpic({epicConfigFile, resumption}) {
-    logger.log('info', `Updating job config: ${epicConfigFile}`);
-    logger.log('debug', JSON.stringify(resumption));
-    const result = await db.collection('epic-items').findOneAndUpdate({
-      epicConfigFile
-    }, {
-      $set: {
-        resumption,
-        modificationTime: moment().toDate()
-      }
-    }, {projection: {_id: 0}, returnNewDocument: true});
-    return result.value;
-  }
-
-  async function pushJobIds({epicConfigFile, list}) {
+  async function pushJobsAndUpdateSourceHarvesting({epicConfigFile, sourceHarvesting, list}) {
     logger.log('info', '********************************************');
     logger.log('debug', `Pushing to epic item ${epicConfigFile} job ids: ${list}`);
     await db.collection('epic-items').updateOne({
@@ -225,6 +211,7 @@ export async function createEpicMongoOperator(mongoUrl) {
         jobs: {$each: list}
       },
       $set: {
+        sourceHarvesting,
         modificationTime: moment().toDate()
       }
     });
