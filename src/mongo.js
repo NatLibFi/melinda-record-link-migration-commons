@@ -222,13 +222,13 @@ export async function createEpicMongoOperator(mongoUrl) {
           jobs: {$each: jobs}
         },
         $set: {
-          "sourceHarvesting.resumptionToken": resumptionToken,
+          "sourceHarvesting.sourceRecordHarvestConfig.resumptionToken": resumptionToken,
           modificationTime: moment().toDate()
         }
       });
     }
 
-    if (offset !== null && resumptionToken === null) {
+    if (offset !== null && resumptionToken === null) {z
       return db.collection('epic-items').updateOne({
         epicConfigFile
       }, {
@@ -236,7 +236,7 @@ export async function createEpicMongoOperator(mongoUrl) {
           jobs: {$each: jobs}
         },
         $set: {
-          "sourceHarvesting.offset": offset,
+          "sourceHarvesting.sourceRecordHarvestConfig.offset": offset,
           modificationTime: moment().toDate()
         }
       });
