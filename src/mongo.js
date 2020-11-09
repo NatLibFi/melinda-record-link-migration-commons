@@ -213,7 +213,7 @@ export async function createEpicMongoOperator(mongoUrl) {
   }
 
   async function updateJobsDone({epicConfigFile, jobsDone}) {
-    logger.log('info', `Setting jobItem state: ${epicConfigFile}, ${epicState}`);
+    logger.log('info', `Setting jobs done: ${epicConfigFile}, ${jobsDone}`);
     const result = await db.collection('epic-items').findOneAndUpdate({
       epicConfigFile
     }, {
