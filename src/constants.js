@@ -6,6 +6,7 @@ export const EPIC_JOB_STATES = {
   DONE: 'DONE',
   ERROR: 'ERROR',
   IN_PROCESS: 'IN_PROCESS',
+  LOADING: 'LOADING',
   PENDING: 'PENDING'
 };
 
