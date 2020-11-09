@@ -151,7 +151,7 @@ export async function createEpicMongoOperator(mongoUrl) {
     // Create JobItem
     const newJobItem = {
       epicConfigFile,
-      epicState: EPIC_JOB_STATES.PENDING,
+      epicState: EPIC_JOB_STATES.LOADING,
       sourceHarvesting,
       linkDataHarvesting,
       jobs: [],
