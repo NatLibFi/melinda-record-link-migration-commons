@@ -145,7 +145,7 @@ export async function createEpicMongoOperator(mongoUrl) {
   const client = await MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
   const db = client.db('linkker');
 
-  return {createEpic, removeEpic, getByState, getByEpicConfigFile, setState, updateResumptionData, pushJobs};
+  return {createEpic, removeEpic, getByState, getByEpicConfigFile, setState, updateJobsDone, updateResumptionData, pushJobs};
 
   function createEpic({epicConfigFile, sourceHarvesting, linkDataHarvesting}) {
     // Create JobItem
@@ -155,6 +155,7 @@ export async function createEpicMongoOperator(mongoUrl) {
       sourceHarvesting,
       linkDataHarvesting,
       jobs: [],
+      jobsDone: 0,
       creationTime: moment().toDate(),
       modificationTime: moment().toDate()
     };
@@ -205,6 +206,19 @@ export async function createEpicMongoOperator(mongoUrl) {
     }, {
       $set: {
         epicState,
+        modificationTime: moment().toDate()
+      }
+    }, {projection: {_id: 0}, returnNewDocument: true});
+    return result.value;
+  }
+
+  async function updateJobsDone({epicConfigFile, jobsDone}) {
+    logger.log('info', `Setting jobItem state: ${epicConfigFile}, ${epicState}`);
+    const result = await db.collection('epic-items').findOneAndUpdate({
+      epicConfigFile
+    }, {
+      $set: {
+        jobsDone,
         modificationTime: moment().toDate()
       }
     }, {projection: {_id: 0}, returnNewDocument: true});
