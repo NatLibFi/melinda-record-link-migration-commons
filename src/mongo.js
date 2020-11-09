@@ -145,7 +145,7 @@ export async function createEpicMongoOperator(mongoUrl) {
   const client = await MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
   const db = client.db('linkker');
 
-  return {createEpic, removeEpic, getByState, getByEpicConfigFile, setState, pushJobsAndUpdateSourceHarvesting};
+  return {createEpic, removeEpic, getByState, getByEpicConfigFile, setState, updateResumptionData, pushJobs};
 
   function createEpic({epicConfigFile, sourceHarvesting, linkDataHarvesting}) {
     // Create JobItem
@@ -211,30 +211,22 @@ export async function createEpicMongoOperator(mongoUrl) {
     return result.value;
   }
 
-  async function pushJobsAndUpdateSourceHarvesting({epicConfigFile, resumptionToken = null, offset = null, jobs}) {
-    logger.log('info', '********************************************');
-    logger.log('debug', `Pushing to epic item ${epicConfigFile} job ids: ${jobs}`);
+  async function updateResumptionData({epicConfigFile, resumptionToken = null, offset = null}) {
     if (resumptionToken !== null && offset === null) {
       return db.collection('epic-items').updateOne({
         epicConfigFile
       }, {
-        $push: {
-          jobs: {$each: jobs}
-        },
         $set: {
           "sourceHarvesting.sourceRecordHarvestConfig.resumptionToken": resumptionToken,
           modificationTime: moment().toDate()
         }
       });
-    }
+    };
 
-    if (offset !== null && resumptionToken === null) {z
+    if (offset !== null && resumptionToken === null) {
       return db.collection('epic-items').updateOne({
         epicConfigFile
       }, {
-        $push: {
-          jobs: {$each: jobs}
-        },
         $set: {
           "sourceHarvesting.sourceRecordHarvestConfig.offset": offset,
           modificationTime: moment().toDate()
@@ -243,5 +235,21 @@ export async function createEpicMongoOperator(mongoUrl) {
     }
 
     throw new ApiError(400, 'Invalid parametters');
+  }
+
+  async function pushJobs({epicConfigFile, jobs}) {
+    logger.log('info', '********************************************');
+    logger.log('debug', `Pushing to epic item ${epicConfigFile} job ids: ${jobs}`);
+    return db.collection('epic-items').updateOne({
+      epicConfigFile
+    }, {
+      $push: {
+        jobs: {$each: jobs}
+      },
+      $set: {
+        "sourceHarvesting.sourceRecordHarvestConfig.resumptionToken": resumptionToken,
+        modificationTime: moment().toDate()
+      }
+    });
   }
 }
