@@ -247,7 +247,6 @@ export async function createEpicMongoOperator(mongoUrl) {
         jobs: {$each: jobs}
       },
       $set: {
-        "sourceHarvesting.sourceRecordHarvestConfig.resumptionToken": resumptionToken,
         modificationTime: moment().toDate()
       }
     });
