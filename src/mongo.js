@@ -37,7 +37,7 @@ export default async function (mongoUrl) {
   const client = await MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
   const db = client.db('linkker');
 
-  return {create, query, remove, getOne, getById, setState, updateJobConfig, pushBlobIds};
+  return {create, query, remove, getOne, getAll, getById, setState, updateJobConfig, pushBlobIds};
 
   function create({jobId, jobState, jobConfig}) {
     if (jobState === undefined || jobConfig === undefined) { // eslint-disable-line functional/no-conditional-statement
@@ -77,6 +77,16 @@ export default async function (mongoUrl) {
     try {
       logger.log('debug', `Checking DB for ${jobState}`);
       return db.collection('job-items').findOne({jobState}, {projection: {_id: 0}});
+    } catch (error) {
+      logError(error);
+      return false;
+    }
+  }
+
+  function getAll(jobState) {
+    try {
+      logger.log('debug', `Checking DB for ${jobState}`);
+      return db.collection('job-items').find({jobState}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
       return false;
