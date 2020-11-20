@@ -5,7 +5,7 @@ import {createLogger} from '@natlibfi/melinda-backend-commons';
 import {createApiClient} from '@natlibfi/melinda-record-import-commons';
 import {logError} from './utils';
 
-export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, linkDataHarvesterApiProfileId}) {
+export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent}) {
   const logger = createLogger();
   logger.log('verbose', 'Connecting to erätuonti');
   const client = createApiClient({
@@ -16,13 +16,12 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent, 
   return {sendBlob, readBlob, updateBlobState};
 
   // Send record to transformer
-  async function sendBlob(linkedValids) {
+  async function sendBlob(linkedValids, profile) {
     if (linkedValids === undefined) { // eslint-disable-line functional/no-conditional-statement
       throw new ApiError(400, 'Valid linked data missing!');
     }
     const blob = JSON.stringify(linkedValids);
     const type = 'application/json';
-    const profile = linkDataHarvesterApiProfileId;
     // logger.log('debug', profile);
     // logger.log('debug', type);
     // logger.log('debug', blob);
