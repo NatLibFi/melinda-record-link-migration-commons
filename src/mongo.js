@@ -3,7 +3,7 @@ import {Error as ApiError} from '@natlibfi/melinda-commons';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 import moment from 'moment';
 import {logError} from './utils';
-import {EPIC_JOB_STATES} from './constants';
+import {EPIC_JOB_STATES, HARVESTER_JOB_STATES} from './constants';
 
 /* JobItem:
 {
@@ -26,6 +26,7 @@ import {EPIC_JOB_STATES} from './constants';
       to: {tag: '100', value: {code: '0'}, format: `(FIN11)${0}`}
     }]
   },
+  "blobIds": [],
   "creationTime":"2020-01-01T00:00:00.000Z",
   "modificationTime":"2020-01-01T00:00:01.000Z",
 }
@@ -36,6 +37,11 @@ export default async function (mongoUrl) {
   // Connect to mongo (MONGO)
   const client = await MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
   const db = client.db('linkker');
+  const pendingHarvestStates = [
+    HARVESTER_JOB_STATES.PENDING_FINTO_HARVESTER,
+    HARVESTER_JOB_STATES.PENDING_OAI_PMH_HARVESTER,
+    HARVESTER_JOB_STATES.PENDING_SRU_HARVESTER
+  ];
 
   return {create, query, remove, getOne, getAll, getById, setState, updateJobConfig, pushBlobIds};
 
@@ -105,6 +111,19 @@ export default async function (mongoUrl) {
 
   async function setState({jobId, state}) {
     logger.log('info', `Setting jobItem state: ${jobId}, ${state}`);
+    if (pendingHarvestStates.includes(state)) {
+      const result = await db.collection('job-items').findOneAndUpdate({
+        jobId
+      }, {
+        $set: {
+          jobState: state,
+          modificationTime: moment().toDate(),
+          blobIds: []
+        }
+      });
+      return result.value;
+    }
+
     const result = await db.collection('job-items').findOneAndUpdate({
       jobId
     }, {
