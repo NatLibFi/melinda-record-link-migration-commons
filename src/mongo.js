@@ -235,24 +235,24 @@ export async function createEpicMongoOperator(mongoUrl) {
     return result.value;
   }
 
-  async function updateResumptionData({epicConfigFile, resumptionToken = null, offset = null}) {
+  function updateResumptionData({epicConfigFile, resumptionToken = null, offset = null}) {
     if (resumptionToken !== null && offset === null) {
       return db.collection('epic-items').updateOne({
         epicConfigFile
       }, {
         $set: {
-          "sourceHarvesting.sourceRecordHarvestConfig.resumptionToken": resumptionToken,
+          'sourceHarvesting.sourceRecordHarvestConfig.resumptionToken': resumptionToken,
           modificationTime: moment().toDate()
         }
       });
-    };
+    }
 
     if (offset !== null && resumptionToken === null) {
       return db.collection('epic-items').updateOne({
         epicConfigFile
       }, {
         $set: {
-          "sourceHarvesting.sourceRecordHarvestConfig.offset": offset,
+          'sourceHarvesting.sourceRecordHarvestConfig.offset': offset,
           modificationTime: moment().toDate()
         }
       });
@@ -261,7 +261,7 @@ export async function createEpicMongoOperator(mongoUrl) {
     throw new ApiError(400, 'Invalid parametters');
   }
 
-  async function pushJobs({epicConfigFile, jobs}) {
+  function pushJobs({epicConfigFile, jobs}) {
     logger.log('info', '********************************************');
     logger.log('debug', `Pushing to epic item ${epicConfigFile} job ids: ${jobs}`);
     return db.collection('epic-items').updateOne({
