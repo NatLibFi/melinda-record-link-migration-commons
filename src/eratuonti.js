@@ -80,7 +80,6 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent})
             count += blobs.length;
           })
           .on('end', () => {
-            console.log(count); // eslint-disable-line
             resolve(count);
           });
       });
