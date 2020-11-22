@@ -13,7 +13,7 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent})
     userAgent: apiClientUserAgent
   });
 
-  return {sendBlob, readBlob, updateBlobState};
+  return {sendBlob, readBlob, updateBlobState, countBlobs};
 
   // Send record to transformer
   async function sendBlob(linkedValids, profile) {
@@ -61,6 +61,18 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent})
       return result;
     } catch (error) {
       logger.log('error', 'Error while updating blob state to erätuonti!');
+      logError(error);
+      return false;
+    }
+  }
+
+  async function countBlobs(state) {
+    try {
+      const result = await client.getBlobs({state});
+      console.log(result.length); // eslint-disable-line
+      return result.length;
+    } catch (error) {
+      logger.log('error', `Error while counting blobs in state: ${state}!`);
       logError(error);
       return false;
     }
