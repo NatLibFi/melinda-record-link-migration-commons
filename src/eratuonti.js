@@ -69,7 +69,7 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent})
   async function countBlobs(state) {
     try {
       const result = await client.getBlobs({state});
-      console.log(result.length); // eslint-disable-line
+      console.log(result); // eslint-disable-line
       return result.length;
     } catch (error) {
       logger.log('error', `Error while counting blobs in state: ${state}!`);
