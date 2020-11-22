@@ -76,7 +76,9 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent})
 
         emitter
           .on('error', reject)
-          .on('blobs', count += 1)
+          .on('blobs', blobs => {
+            count += blobs.length;
+          })
           .on('end', () => {
             console.log(count); // eslint-disable-line
             resolve(count);
