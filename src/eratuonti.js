@@ -4,6 +4,7 @@ import {Error as ApiError} from '@natlibfi/melinda-commons';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 import {createApiClient} from '@natlibfi/melinda-record-import-commons';
 import {logError} from './utils';
+import {EventEmitter} from 'events';
 
 export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent}) {
   const logger = createLogger();
@@ -68,9 +69,15 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent})
 
   async function countBlobs(state) {
     try {
-      const result = await client.getBlobs({state});
-      console.log(result); // eslint-disable-line
-      return result.length;
+      let count = 0; // eslint-disable-line
+      const emitter = await client.getBlobs({state});
+
+      emitter
+        .on('blob', () => count++)
+        .on('end', () => {
+          console.log(count); // eslint-disable-line
+          return count;
+        });
     } catch (error) {
       logger.log('error', `Error while counting blobs in state: ${state}!`);
       logError(error);
