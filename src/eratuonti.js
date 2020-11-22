@@ -68,20 +68,20 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent})
     }
   }
 
-  async function countBlobs(state) {
+  function countBlobs(state) {
     try {
       return new Promise((resolve, reject) => {
         let count = 0; // eslint-disable-line
-        const emitter = await client.getBlobs({state});
+        const emitter = client.getBlobs({state});
 
         emitter
-          .on('blob', () => count++)
+          .on('error', reject)
+          .on('blobs', count += 1)
           .on('end', () => {
             console.log(count); // eslint-disable-line
             resolve(count);
-          })
-          .on('error', error => reject(error));
-      })
+          });
+      });
     } catch (error) {
       logger.log('error', `Error while counting blobs in state: ${state}!`);
       logError(error);
