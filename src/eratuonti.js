@@ -46,11 +46,12 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent})
 
   async function readBlob(id) {
     try {
+      logger.log('info', 'READING BLOB!');
       const result = await client.getBlobMetadata({id});
-      logger.log('debug', JSON.stringify(result));
+      logger.log('info', JSON.stringify(result));
       return result;
     } catch (error) {
-      logger.log('error', 'Error while reading blob from erätuonti!');
+      logger.log('info', 'Error while reading blob from erätuonti!');
       logError(error);
       return false;
     }
