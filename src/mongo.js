@@ -43,7 +43,7 @@ export default async function (mongoUrl) {
     HARVESTER_JOB_STATES.PENDING_SRU_HARVESTER
   ];
 
-  return {create, query, remove, getOne, getAll, getById, setState, updateJobConfig, pushBlobIds};
+  return {create, query, remove, getOne, getAll, getById, countByState, setState, updateJobConfig, pushBlobIds};
 
   function create({jobId, jobState, jobConfig}) {
     if (jobState === undefined || jobConfig === undefined) { // eslint-disable-line functional/no-conditional-statement
@@ -99,10 +99,20 @@ export default async function (mongoUrl) {
     }
   }
 
-  function getById(id) {
+  function getById(jobId) {
     try {
-      logger.log('debug', `Checking DB for id: ${id}`);
-      return db.collection('job-items').findOne({jobId: id}, {projection: {_id: 0}});
+      logger.log('debug', `Checking DB for id: ${jobId}`);
+      return db.collection('job-items').findOne({jobId}, {projection: {_id: 0}});
+    } catch (error) {
+      logError(error);
+      return false;
+    }
+  }
+
+  function countByState(jobState) {
+    try {
+      logger.log('debug', `Counting from DB jobs in state: ${jobState}`);
+      return db.collection('job-items').countDocuments({jobState}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
       return false;
