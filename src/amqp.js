@@ -130,10 +130,6 @@ export default async function (AMQP_URL) {
 
   async function sendToQueue({queue, correlationId, data}) {
     try {
-      // Logger.log('debug', `Record queue ${queue}`)
-      // Logger.log('debug', `Record correlationId ${correlationId}`);
-      // Logger.log('debug', `Record data ${data}`);
-
       await channel.assertQueue(queue, {durable: true, autoDelete: true});
 
       channel.sendToQueue(
@@ -144,8 +140,6 @@ export default async function (AMQP_URL) {
           persistent: true
         }
       );
-
-      // Spams: logger.log('debug', `Message send to queue ${queue}`);
     } catch (error) {
       logError(error);
     }

@@ -46,6 +46,7 @@ export default async function (mongoUrl) {
   return {create, query, remove, getOne, getAll, getById, countByState, setState, updateJobConfig, pushBlobIds};
 
   function create({jobId, jobState, jobConfig}) {
+    logger.log('verbose', `Create new job ${jobId} - ${jobState} to DB`);
     if (jobState === undefined || jobConfig === undefined) { // eslint-disable-line functional/no-conditional-statement
       throw new ApiError(400, 'Invalid job settings!');
     }
@@ -60,7 +61,7 @@ export default async function (mongoUrl) {
     };
     try {
       db.collection('job-items').insertOne(newJobItem);
-      logger.log('info', 'New jobItem has been made!');
+      logger.log('debug', 'New jobItem has been made!');
       return db.collection('job-items').findOne({jobId}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
@@ -69,19 +70,21 @@ export default async function (mongoUrl) {
   }
 
   async function query(params) {
+    logger.log('verbose', `Query from DB`);
     const result = await db.collection('job-items').find(params, {projection: {_id: 0}}).toArray();
     logger.log('debug', `Query result: ${result.length > 0 ? 'Found!' : 'Not found!'}`);
     return result;
   }
 
   async function remove(params) {
+    logger.log('verbose', `Removing ${jobState} from DB`);
     await db.collection('job-items').deleteOne(params);
     return true;
   }
 
   function getOne(jobState) {
     try {
-      logger.log('debug', `Checking DB for ${jobState}`);
+      logger.log('verbose', `Checking DB for ${jobState}`);
       return db.collection('job-items').findOne({jobState}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
@@ -91,7 +94,7 @@ export default async function (mongoUrl) {
 
   function getAll(jobState) {
     try {
-      logger.log('debug', `Checking DB for ${jobState}`);
+      logger.log('verbose', `Checking DB for ${jobState}`);
       return db.collection('job-items').find({jobState}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
@@ -101,7 +104,7 @@ export default async function (mongoUrl) {
 
   function getById(jobId) {
     try {
-      logger.log('debug', `Checking DB for id: ${jobId}`);
+      logger.log('verbose', `Checking DB for id: ${jobId}`);
       return db.collection('job-items').findOne({jobId}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
@@ -111,7 +114,7 @@ export default async function (mongoUrl) {
 
   function countByState(jobState) {
     try {
-      logger.log('debug', `Counting from DB jobs in state: ${jobState}`);
+      logger.log('verbose', `Counting from DB jobs in state: ${jobState}`);
       return db.collection('job-items').countDocuments({jobState}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
@@ -120,7 +123,7 @@ export default async function (mongoUrl) {
   }
 
   async function setState({jobId, state}) {
-    logger.log('info', `Setting jobItem state: ${jobId}, ${state}`);
+    logger.log('verbose', `Setting jobItem state: ${jobId}, ${state}`);
     if (pendingHarvestStates.includes(state)) {
       const result = await db.collection('job-items').findOneAndUpdate({
         jobId
@@ -146,8 +149,8 @@ export default async function (mongoUrl) {
   }
 
   async function updateJobConfig({jobId, jobConfig}) {
-    logger.log('info', `Updating job config: ${jobId}`);
-    // Logger.log('silly', JSON.stringify(jobConfig));
+    logger.log('verbose', `Updating job config: ${jobId}`);
+    logger.log('silly', JSON.stringify(jobConfig));
     const result = await db.collection('job-items').findOneAndUpdate({
       jobId
     }, {
@@ -160,11 +163,9 @@ export default async function (mongoUrl) {
   }
 
   async function pushBlobIds(order) {
-    logger.log('info', '********************************************');
-    logger.log('info', JSON.stringify(order));
-    logger.log('info', '********************************************');
+    logger.log('verbose', `Push jobItem ${jobId} blobIds list: ${blobIds}`);
+    logger.log('silly', JSON.stringify(order));
     const {jobId, blobIds} = order;
-    logger.log('debug', `Push jobItem ${jobId} blobIds list: ${blobIds}`);
     await db.collection('job-items').updateOne({
       jobId
     }, {
@@ -184,7 +185,7 @@ export async function createEpicMongoOperator(mongoUrl) {
   const client = await MongoClient.connect(mongoUrl, {useNewUrlParser: true, useUnifiedTopology: true});
   const db = client.db('linkker');
 
-  return {createEpic, removeEpic, getByState, getByEpicConfigFile, setState, updateJobsDone, updateResumptionData, pushJobs};
+  return {createEpic, removeEpic, getByState, getByEpicConfigFile, setState, updateResumptionData, pushJobs};
 
   function createEpic({epicConfigFile, sourceHarvesting, linkDataHarvesting}) {
     // Create JobItem
@@ -194,13 +195,12 @@ export async function createEpicMongoOperator(mongoUrl) {
       sourceHarvesting,
       linkDataHarvesting,
       jobs: [],
-      jobsDone: 0,
       creationTime: moment().toDate(),
       modificationTime: moment().toDate()
     };
     try {
       db.collection('epic-items').insertOne(newJobItem);
-      logger.log('info', 'New jobItem has been made!');
+      logger.log('verbose', 'New jobItem has been made!');
       return db.collection('epic-items').findOne({epicConfigFile}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
@@ -210,7 +210,7 @@ export async function createEpicMongoOperator(mongoUrl) {
 
   function removeEpic({epicConfigFile}) {
     try {
-      logger.log('debug', `Removing epic from DB: ${epicConfigFile}`);
+      logger.log('verbose', `Removing epic from DB: ${epicConfigFile}`);
       return db.collection('epic-items').deleteOne({epicConfigFile});
     } catch (error) {
       logError(error);
@@ -220,7 +220,7 @@ export async function createEpicMongoOperator(mongoUrl) {
 
   function getByState({epicState}) {
     try {
-      logger.log('debug', `Checking DB for state: ${epicState}`);
+      logger.log('verbose', `Checking DB for state: ${epicState}`);
       return db.collection('epic-items').findOne({epicState}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
@@ -230,7 +230,7 @@ export async function createEpicMongoOperator(mongoUrl) {
 
   function getByEpicConfigFile({epicConfigFile}) {
     try {
-      logger.log('debug', `Checking DB for id: ${epicConfigFile}`);
+      logger.log('verbose', `Checking DB for id: ${epicConfigFile}`);
       return db.collection('epic-items').findOne({epicConfigFile}, {projection: {_id: 0}});
     } catch (error) {
       logError(error);
@@ -239,7 +239,7 @@ export async function createEpicMongoOperator(mongoUrl) {
   }
 
   async function setState({epicConfigFile, epicState}) {
-    logger.log('info', `Setting jobItem state: ${epicConfigFile}, ${epicState}`);
+    logger.log('verbose', `Setting jobItem state: ${epicConfigFile}, ${epicState}`);
     const result = await db.collection('epic-items').findOneAndUpdate({
       epicConfigFile
     }, {
@@ -251,20 +251,8 @@ export async function createEpicMongoOperator(mongoUrl) {
     return result.value;
   }
 
-  async function updateJobsDone({epicConfigFile, jobsDone}) {
-    logger.log('info', `Setting jobs done: ${epicConfigFile}, ${jobsDone}`);
-    const result = await db.collection('epic-items').findOneAndUpdate({
-      epicConfigFile
-    }, {
-      $set: {
-        jobsDone,
-        modificationTime: moment().toDate()
-      }
-    }, {projection: {_id: 0}, returnNewDocument: true});
-    return result.value;
-  }
-
   function updateResumptionData({epicConfigFile, resumptionToken = null, offset = null}) {
+    logger.log('verbose', `Updating to epic item ${epicConfigFile} resumption token: ${resumptionToken ? resumptionToken : offset}`);
     if (resumptionToken !== null && offset === null) {
       return db.collection('epic-items').updateOne({
         epicConfigFile
@@ -291,8 +279,7 @@ export async function createEpicMongoOperator(mongoUrl) {
   }
 
   function pushJobs({epicConfigFile, jobs}) {
-    logger.log('info', '********************************************');
-    logger.log('debug', `Pushing to epic item ${epicConfigFile} job ids: ${jobs}`);
+    logger.log('verbose', `Pushing to epic item ${epicConfigFile} job ids: ${jobs}`);
     return db.collection('epic-items').updateOne({
       epicConfigFile
     }, {

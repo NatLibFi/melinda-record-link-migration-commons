@@ -33,7 +33,6 @@ export default function () {
   }
 
   // Filter & sort
-
   function filterExistingFields(linkDataFields, record) {
     return linkDataFields.filter(field => {
       logger.log('silly', `Removing duplicate ${field.tag}, ${JSON.stringify(field.subfields)}`);
@@ -96,7 +95,6 @@ export default function () {
   }
 
   // Modify
-
   function removeSubfields(record, config) {
     logger.log('verbose', 'Removing subfields from record');
     const valueRegexp = new RegExp(`${config.value}`, 'u');
@@ -122,7 +120,6 @@ export default function () {
   }
 
   function replaceValueInField(sourceRecord, record, change) {
-    // TEST {from, to, order} = change;
     const {from, to} = change;
     const changeValues = from.value === 'value' ? valuesFromRecord(sourceRecord, change) : subfieldsFromRecord(sourceRecord, change);
     logger.log('verbose', `Change value ${changeValues}`);
@@ -177,7 +174,6 @@ export default function () {
   }
 
   // Get
-
   function subfieldsFromRecord(record, {from, collect = []}) {
     const fields = record.get(new RegExp(`^${from.tag}$`, 'u'));
     if (fields.length === 0) {
