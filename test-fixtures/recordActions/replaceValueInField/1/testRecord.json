@@ -1,0 +1,421 @@
+{
+    "_validationOptions": {
+        "subfieldValues": false
+    },
+    "leader": "01243cca a22003374i 4500",
+    "fields": [
+        {
+            "tag": "001",
+            "value": "015537776"
+        },
+        {
+            "tag": "003",
+            "value": "FI-MELINDA"
+        },
+        {
+            "tag": "005",
+            "value": "20190426225409.0"
+        },
+        {
+            "tag": "007",
+            "value": "qu"
+        },
+        {
+            "tag": "008",
+            "value": "100105s2009    xx zzz j|||||||nn | fin| "
+        },
+        {
+            "tag": "035",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "879745"
+                }
+            ]
+        },
+        {
+            "tag": "035",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "(FI-MELINDA)015537776"
+                }
+            ]
+        },
+        {
+            "tag": "041",
+            "ind1": "1",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "fin"
+                }
+            ]
+        },
+        {
+            "tag": "042",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "finbd"
+                }
+            ]
+        },
+        {
+            "tag": "245",
+            "ind1": "0",
+            "ind2": "0",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "Punapurjeet."
+                }
+            ]
+        },
+        {
+            "tag": "336",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "nuottikirjoitus"
+                },
+                {
+                    "code": "b",
+                    "value": "ntm"
+                },
+                {
+                    "code": "2",
+                    "value": "rdacontent"
+                }
+            ]
+        },
+        {
+            "tag": "337",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "käytettävissä ilman laitetta"
+                },
+                {
+                    "code": "b",
+                    "value": "n"
+                },
+                {
+                    "code": "2",
+                    "value": "rdamedia"
+                }
+            ]
+        },
+        {
+            "tag": "500",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "Kreikkalainen sävelmä."
+                }
+            ]
+        },
+        {
+            "tag": "500",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "Soitinnus: melodia, sointumerkit."
+                }
+            ]
+        },
+        {
+            "tag": "542",
+            "ind1": "1",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "f",
+                    "value": "© WSOYpro"
+                }
+            ]
+        },
+        {
+            "tag": "546",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "Sanat: suomi."
+                }
+            ]
+        },
+        {
+            "tag": "598",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "[Nuottijulkaisu]."
+                }
+            ]
+        },
+        {
+            "tag": "700",
+            "ind1": "1",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "foo, faa,"
+                },
+                {
+                    "code": "d",
+                    "value": "1001-"
+                },
+                {
+                    "code": "e",
+                    "value": "sanoittaja."
+                }
+            ]
+        },
+        {
+            "tag": "700",
+            "ind1": "1",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "foo, faa,"
+                },
+                {
+                    "code": "d",
+                    "value": "1000-"
+                },
+                {
+                    "code": "e",
+                    "value": "sanoittaja."
+                }
+            ]
+        },
+        {
+            "tag": "700",
+            "ind1": "1",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "faa, foo,"
+                },
+                {
+                    "code": "d",
+                    "value": "1000-"
+                },
+                {
+                    "code": "e",
+                    "value": "sanoittaja."
+                }
+            ]
+        },
+        {
+            "tag": "773",
+            "ind1": "0",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "7",
+                    "value": "nncm"
+                },
+                {
+                    "code": "w",
+                    "value": "(FI-MELINDA)015526054"
+                },
+                {
+                    "code": "t",
+                    "value": "Kultaiset koululaulut 70-luvulta nykypäivään. -"
+                },
+                {
+                    "code": "d",
+                    "value": "Helsinki : Tammi, 2009 . -"
+                },
+                {
+                    "code": "h",
+                    "value": "1 sävelmäkokoelma. -"
+                },
+                {
+                    "code": "z",
+                    "value": "978-951-31-4942-0. -"
+                },
+                {
+                    "code": "o",
+                    "value": "9789513149420."
+                }
+            ]
+        },
+        {
+            "tag": "973",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "7",
+                    "value": "nncm"
+                },
+                {
+                    "code": "w",
+                    "value": "(FI-MELINDA)015526054"
+                },
+                {
+                    "code": "t",
+                    "value": "Kultaiset koululaulut 70-luvulta nykypäivään. -"
+                },
+                {
+                    "code": "d",
+                    "value": "Helsinki : Tammi, 2009 . -"
+                },
+                {
+                    "code": "h",
+                    "value": "1 sävelmäkokoelma. -"
+                },
+                {
+                    "code": "z",
+                    "value": "978-951-31-4942-0. -"
+                },
+                {
+                    "code": "o",
+                    "value": "9789513149420."
+                }
+            ]
+        },
+        {
+            "tag": "SID",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "c",
+                    "value": "879745"
+                },
+                {
+                    "code": "b",
+                    "value": "viola"
+                }
+            ]
+        },
+        {
+            "tag": "CAT",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "LOAD-VIOLA"
+                },
+                {
+                    "code": "b",
+                    "value": "20"
+                },
+                {
+                    "code": "c",
+                    "value": "20190426"
+                },
+                {
+                    "code": "l",
+                    "value": "FIN01"
+                },
+                {
+                    "code": "h",
+                    "value": "2254"
+                }
+            ]
+        },
+        {
+            "tag": "CAT",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "LOAD-ID"
+                },
+                {
+                    "code": "b",
+                    "value": "00"
+                },
+                {
+                    "code": "c",
+                    "value": "20190712"
+                },
+                {
+                    "code": "l",
+                    "value": "FIN01"
+                },
+                {
+                    "code": "h",
+                    "value": "2241"
+                }
+            ]
+        },
+        {
+            "tag": "CAT",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "LOAD-ID"
+                },
+                {
+                    "code": "b",
+                    "value": "00"
+                },
+                {
+                    "code": "c",
+                    "value": "20190830"
+                },
+                {
+                    "code": "l",
+                    "value": "FIN01"
+                },
+                {
+                    "code": "h",
+                    "value": "2340"
+                }
+            ]
+        },
+        {
+            "tag": "LOW",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "VIOLA"
+                }
+            ]
+        },
+        {
+            "tag": "LOW",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "FIKKA"
+                }
+            ]
+        }
+    ]
+}

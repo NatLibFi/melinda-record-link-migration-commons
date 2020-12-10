@@ -1,0 +1,325 @@
+{
+    "_validationOptions": {
+        "subfieldValues": false
+    },
+    "leader": "     cz  a2200229n  4500",
+    "fields": [
+        {
+            "tag": "001",
+            "value": "000039966"
+        },
+        {
+            "tag": "003",
+            "value": "FI-ASTERI-N"
+        },
+        {
+            "tag": "005",
+            "value": "20200605210052.0"
+        },
+        {
+            "tag": "008",
+            "value": "101228| |az|||aabn           | aaa      "
+        },
+        {
+            "tag": "024",
+            "ind1": "7",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "0000000481552498"
+                },
+                {
+                    "code": "2",
+                    "value": "isni"
+                }
+            ]
+        },
+        {
+            "tag": "035",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "z",
+                    "value": "(FI-ASTERI-N)000081911"
+                }
+            ]
+        },
+        {
+            "tag": "035",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "(FI-ASTERI-N)000039966"
+                }
+            ]
+        },
+        {
+            "tag": "040",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "FI-NL"
+                },
+                {
+                    "code": "b",
+                    "value": "fin"
+                },
+                {
+                    "code": "e",
+                    "value": "rda"
+                },
+                {
+                    "code": "d",
+                    "value": "FI-NLD"
+                }
+            ]
+        },
+        {
+            "tag": "043",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "c",
+                    "value": "FI"
+                }
+            ]
+        },
+        {
+            "tag": "046",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "f",
+                    "value": "1952-05-09"
+                },
+                {
+                    "code": "2",
+                    "value": "edtf"
+                }
+            ]
+        },
+        {
+            "tag": "100",
+            "ind1": "1",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "foo, faa,"
+                },
+                {
+                    "code": "d",
+                    "value": "1000-"
+                },
+                {
+                    "code": "0",
+                    "value": "(FI-ASTERI-N)000039966"
+                }
+            ]
+        },
+        {
+            "tag": "370",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "Helsinki, Suomi"
+                }
+            ]
+        },
+        {
+            "tag": "372",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "lastenkirjallisuus"
+                },
+                {
+                    "code": "2",
+                    "value": "yso/fin"
+                },
+                {
+                    "code": "0",
+                    "value": "http://www.yso.fi/onto/yso/p4742"
+                }
+            ]
+        },
+        {
+            "tag": "372",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "runot"
+                },
+                {
+                    "code": "2",
+                    "value": "yso/fin"
+                },
+                {
+                    "code": "0",
+                    "value": "http://www.yso.fi/onto/yso/p24644"
+                }
+            ]
+        },
+        {
+            "tag": "372",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "fantasiakirjallisuus"
+                },
+                {
+                    "code": "2",
+                    "value": "yso/fin"
+                },
+                {
+                    "code": "0",
+                    "value": "http://www.yso.fi/onto/yso/p14840"
+                }
+            ]
+        },
+        {
+            "tag": "372",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "kaunokirjallisuus"
+                },
+                {
+                    "code": "2",
+                    "value": "yso/fin"
+                },
+                {
+                    "code": "0",
+                    "value": "http://www.yso.fi/onto/yso/p4"
+                }
+            ]
+        },
+        {
+            "tag": "372",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "lastenmusiikki"
+                },
+                {
+                    "code": "2",
+                    "value": "yso/fin"
+                },
+                {
+                    "code": "0",
+                    "value": "http://www.yso.fi/onto/yso/p18718"
+                }
+            ]
+        },
+        {
+            "tag": "374",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "kirjailija"
+                },
+                {
+                    "code": "2",
+                    "value": "mts"
+                },
+                {
+                    "code": "0",
+                    "value": "http://urn.fi/URN:NBN:fi:au:mts:m3004"
+                }
+            ]
+        },
+        {
+            "tag": "374",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "sanoittaja"
+                },
+                {
+                    "code": "2",
+                    "value": "mts"
+                },
+                {
+                    "code": "0",
+                    "value": "http://urn.fi/URN:NBN:fi:au:mts:m2933"
+                }
+            ]
+        },
+        {
+            "tag": "377",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "fin"
+                }
+            ]
+        },
+        {
+            "tag": "SID",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "c",
+                    "value": "340"
+                },
+                {
+                    "code": "b",
+                    "value": "fenau"
+                }
+            ]
+        },
+        {
+            "tag": "SID",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "c",
+                    "value": "70633"
+                },
+                {
+                    "code": "b",
+                    "value": "vioau"
+                }
+            ]
+        },
+        {
+            "tag": "UPD",
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+                {
+                    "code": "a",
+                    "value": "Y"
+                }
+            ]
+        }
+    ]
+}

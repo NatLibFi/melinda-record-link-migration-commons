@@ -1,0 +1,8 @@
+{
+    "description": "Filters allready existing fields from linked data",
+    "testedFunction": "subfieldsFromRecord",
+    "config": {
+        "collect": ["a", "b", "c", "d", "q"],
+        "from": {"tag": "100", "value": "collect"}
+      }
+}

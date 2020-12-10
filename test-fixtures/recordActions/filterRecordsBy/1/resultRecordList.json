@@ -1,0 +1,332 @@
+[
+  {
+    "_validationOptions": {},
+    "leader": "01911cca a22004814i 4500",
+    "fields": [
+      {
+        "tag": "001",
+        "value": "006663041"
+      },
+      {
+        "tag": "003",
+        "value": "FI-MELINDA"
+      },
+      {
+        "tag": "005",
+        "value": "20190424225956.0"
+      },
+      {
+        "tag": "007",
+        "value": "qu"
+      },
+      {
+        "tag": "008",
+        "value": "941230s1985    fi gmz||||||||||||||fin||"
+      },
+      {
+        "tag": "035",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "9",
+            "value": "v000306960"
+          }
+        ]
+      },
+      {
+        "tag": "035",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "9",
+            "value": "0003-06960"
+          }
+        ]
+      },
+      {
+        "tag": "035",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "2965"
+          }
+        ]
+      },
+      {
+        "tag": "035",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "(FI-MELINDA)006663041"
+          }
+        ]
+      },
+      {
+        "tag": "041",
+        "ind1": "0",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "fin"
+          }
+        ]
+      },
+      {
+        "tag": "042",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "finbd"
+          }
+        ]
+      },
+      {
+        "tag": "100",
+        "ind1": "1",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "foo, faa,"
+          },
+          {
+            "code": "d",
+            "value": "1000-"
+          }
+        ]
+      },
+      {
+        "tag": "245",
+        "ind1": "1",
+        "ind2": "0",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Musta poika Afrikan."
+          }
+        ]
+      },
+      {
+        "tag": "336",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "nuottikirjoitus"
+          },
+          {
+            "code": "b",
+            "value": "ntm"
+          },
+          {
+            "code": "2",
+            "value": "rdacontent"
+          }
+        ]
+      },
+      {
+        "tag": "337",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "käytettävissä ilman laitetta"
+          },
+          {
+            "code": "b",
+            "value": "n"
+          },
+          {
+            "code": "2",
+            "value": "rdamedia"
+          }
+        ]
+      },
+      {
+        "tag": "382",
+        "ind1": "1",
+        "ind2": "1",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "kosketinsoitin"
+          },
+          {
+            "code": "0",
+            "value": "http://urn.fi/urn:nbn:fi:au:seko:00543"
+          },
+          {
+            "code": "n",
+            "value": "1"
+          },
+          {
+            "code": "2",
+            "value": "seko"
+          }
+        ]
+      },
+      {
+        "tag": "500",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Musiikin esityskokoonpano: kosketinsoitin, sointumerkit."
+          }
+        ]
+      },
+      {
+        "tag": "546",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Sanat: suomi."
+          }
+        ]
+      },
+      {
+        "tag": "546",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "b",
+            "value": "Sisältää sointumerkit."
+          }
+        ]
+      },
+      {
+        "tag": "500",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "Soitinnus: kosketinsoitin, sointumerkit."
+          }
+        ]
+      },
+      {
+        "tag": "773",
+        "ind1": "0",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "7",
+            "value": "nncm"
+          },
+          {
+            "code": "w",
+            "value": "(FI-MELINDA)004576566"
+          },
+          {
+            "code": "t",
+            "value": "Laula pieni sydämeni : lasten hengellisiä lauluja. -"
+          },
+          {
+            "code": "d",
+            "value": "Hämeenlinna : Kustannuskeskus Päivä, [1985]. -1 sävelmäkokoelma. -"
+          },
+          {
+            "code": "z",
+            "value": "951-622-334-6. -"
+          },
+          {
+            "code": "g",
+            "value": ", s. 9"
+          }
+        ]
+      },
+      {
+        "tag": "790",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "a",
+            "value": "000306460"
+          },
+          {
+            "code": "5",
+            "value": "VIOLA"
+          }
+        ]
+      },
+      {
+        "tag": "973",
+        "ind1": "0",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "7",
+            "value": "nncm"
+          },
+          {
+            "code": "w",
+            "value": "(FI-MELINDA)004576566"
+          },
+          {
+            "code": "t",
+            "value": "Laula pieni sydämeni : lasten hengellisiä lauluja. -"
+          },
+          {
+            "code": "d",
+            "value": "Hämeenlinna : Kustannuskeskus Päivä, [1985]. -1 sävelmäkokoelma. -"
+          },
+          {
+            "code": "z",
+            "value": "951-622-334-6. -"
+          },
+          {
+            "code": "g",
+            "value": ", s. 9"
+          }
+        ]
+      },
+      {
+        "tag": "SID",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "c",
+            "value": "2965"
+          },
+          {
+            "code": "b",
+            "value": "viola"
+          }
+        ]
+      },
+      {
+        "tag": "HLI",
+        "ind1": " ",
+        "ind2": " ",
+        "subfields": [
+          {
+            "code": "b",
+            "value": "viola"
+          },
+          {
+            "code": "w",
+            "value": "9516223346"
+          }
+        ]
+      }
+    ]
+  }
+]

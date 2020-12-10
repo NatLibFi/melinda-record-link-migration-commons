@@ -1,0 +1,5 @@
+{
+    "description": "Filters allready existing fields from linked data",
+    "testedFunction": "valuesFromRecord",
+    "config": {"from": {"tag": "001"}}
+}

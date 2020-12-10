@@ -1,0 +1,5 @@
+{
+    "description": "Should add field 650 in record",
+    "testedFunction": "addOrReplaceDataFields",
+    "duplicateFilterCodes": ["a", "2", "0"]
+}
