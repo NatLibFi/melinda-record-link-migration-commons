@@ -4,8 +4,6 @@ import {Error as ApiError} from '@natlibfi/melinda-commons';
 import {createLogger} from '@natlibfi/melinda-backend-commons';
 import {createApiClient} from '@natlibfi/melinda-record-import-commons';
 import {logError} from './utils';
-import {EventEmitter} from 'events';
-import {on} from 'process';
 
 export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent}) {
   const logger = createLogger();
@@ -24,9 +22,6 @@ export default function ({apiUrl, apiUsername, apiPassword, apiClientUserAgent})
     }
     const blob = JSON.stringify(linkedValids);
     const type = 'application/json';
-    // logger.log('debug', profile);
-    // logger.log('debug', type);
-    // logger.log('debug', blob);
     logger.log('info', 'Data sending to Erätuonti service has begun!');
 
     try {
