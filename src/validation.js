@@ -12,7 +12,7 @@ import {createLogger} from '@natlibfi/melinda-backend-commons';
 
 const logger = createLogger();
 
-export async function createValidationFactory(validationFactoryOptions) {
+export default async function(validationFactoryOptions) {
   logger.log('verbose', 'Creating validation factory');
   logger.log('silly', `with options: ${JSON.stringify(validationFactoryOptions)}`);
   const factoryOptions = [];

@@ -16,6 +16,7 @@
 	"license": "AGPL-3.0+",
 	"version": "1.0.0-alpha.21",
 	"main": "src/index.js",
+	"type": "module",
 	"engines": {
 		"node": "^12"
 	},
